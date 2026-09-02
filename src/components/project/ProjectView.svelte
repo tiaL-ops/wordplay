@@ -50,7 +50,9 @@
     import Wellspring from '@components/wellspring/Wellspring.svelte';
     import LocalizedText from '@components/widgets/LocalizedText.svelte';
     import Options from '@components/widgets/Options.svelte';
-    import Tour, { type UIExplanation } from '@components/widgets/Tour.svelte';
+    import Tour from '@components/widgets/Tour.svelte';
+    import { Tours, type TourID } from '@components/project/tours';
+    import { TourSteps } from '@components/project/tourSteps';
     import ConceptIndex from '@concepts/ConceptIndex';
     import {
         getConceptFromURL,
@@ -81,6 +83,7 @@
         mic,
         musicVisualization,
         Settings,
+        stagePlacement,
     } from '@db/Database';
     import { Projects } from '@db/projects/Projects';
     import {
@@ -99,6 +102,12 @@
     import { withoutAnnotations } from '@locale/withoutAnnotations';
     import Evaluate from '@nodes/Evaluate';
     import Node, { isFieldPosition } from '@nodes/Node';
+    import {
+        linesOfNode,
+        referenceLabel,
+        resolveReference,
+        type ResolvedReference,
+    } from '@db/chats/codeReference';
     import Source from '@nodes/Source';
     import {
         getCheckpoint,
@@ -182,7 +191,15 @@
         setPaletteOpen,
         setProjectCommandContext,
         setResetKeyboardIdle,
+        setLinkedNode,
+        setMessageRequest,
+        setReferencedMessages,
+        setResolvedReferences,
+        type MessageRequest,
         setRevealPalette,
+        getTourRequest,
+        setTourRequest,
+        type TourRequest,
         setSelectedOutput,
         setDrawing,
         setStageScene,
@@ -431,6 +448,17 @@
     let requestedEdit = $state(
         page.url.searchParams.get(PROJECT_PARAM_EDIT) !== null,
     );
+
+    /** The three slots the conversation and the editors use to talk about code
+     *  (#820); see Contexts for why each is a slot. */
+    const linkedNode = writable<Node | undefined>(undefined);
+    setLinkedNode(linkedNode);
+    const referencedMessages = writable(new Map<Node, string[]>());
+    setReferencedMessages(referencedMessages);
+    const resolvedReferences = writable(new Map<string, ResolvedReference>());
+    setResolvedReferences(resolvedReferences);
+    const messageRequest = writable<MessageRequest | undefined>(undefined);
+    setMessageRequest(messageRequest);
 
     /** Whether program edits are permitted right now: an editable project, on the
      * current checkpoint, in edit mode. Debug and play modes are read-only. */
@@ -1194,177 +1222,44 @@
     /** True if the output should show a grid */
     let grid = $state(false);
 
-    /** Which tile-level tour is currently open, if any. */
-    let openTour = $state<
-        | undefined
-        | 'stage'
-        | 'source'
-        | 'docs'
-        | 'palette'
-        | 'collaborate'
-        | 'project'
-    >(undefined);
+    /** Which tour is currently open, if any. Tour definitions live in
+     * `tours.ts` so that anything can name one — the tutorial points at them
+     * with `@Tour/<id>` markup. */
+    let openTour = $state<TourID | undefined>(undefined);
 
-    const stageTourSteps: UIExplanation[] = [
-        { uiid: 'stage', explanation: (l) => l.ui.output.tour.stage },
-        {
-            uiid: 'modeSwitcher',
-            explanation: (l) => l.ui.timeline.tour.modes,
-        },
-        {
-            uiid: 'resetEvaluator',
-            explanation: (l) => l.ui.output.tour.reset,
-        },
-        // The stepping controls appear in edit and debug but not play; the Tour
-        // explains when a target isn't visible, so these steps still read
-        // sensibly there.
-        {
-            uiid: 'timeline',
-            explanation: (l) => l.ui.timeline.tour.timeline,
-        },
-        {
-            uiid: 'timeline',
-            explanation: (l) => l.ui.timeline.tour.history,
-        },
-        {
-            uiid: 'stepControls',
-            explanation: (l) => l.ui.timeline.tour.stepControls,
-        },
-        {
-            uiid: 'conflict',
-            explanation: (l) => l.ui.timeline.tour.annotations,
-        },
-        { uiid: 'editor', explanation: (l) => l.ui.timeline.tour.editor },
-        { uiid: 'stageZoom', explanation: (l) => l.ui.output.tour.zoom },
-        { uiid: 'stageGrid', explanation: (l) => l.ui.output.tour.grid },
-        { uiid: 'stageLock', explanation: (l) => l.ui.output.tour.lock },
-        {
-            uiid: 'stageAnimationSpeed',
-            explanation: (l) => l.ui.output.tour.animationSpeed,
-        },
-    ];
+    /** The slot a `@Tour/<id>` reference writes to. Something above may already
+     * provide one — the tutorial does, since its dialog is a sibling of this
+     * view rather than a descendant — in which case we serve that one; otherwise
+     * we provide our own so a reference in the guide tile still works. */
+    const inheritedTourRequest = getTourRequest();
+    const ownTourRequest: TourRequest = $state({ id: undefined });
+    const tourRequest = inheritedTourRequest ?? ownTourRequest;
+    if (inheritedTourRequest === undefined) setTourRequest(ownTourRequest);
 
-    const sourceTourSteps: UIExplanation[] = [
-        { uiid: 'editor', explanation: (l) => l.ui.source.tour.editor },
-        {
-            uiid: 'textBlocksToggle',
-            explanation: (l) => l.ui.source.tour.textBlocks,
-        },
-        {
-            uiid: 'editorToolbar',
-            explanation: (l) => l.ui.source.tour.toolbar,
-        },
-        {
-            uiid: 'editorExpand',
-            explanation: (l) => l.ui.source.tour.expand,
-        },
-        {
-            uiid: 'shortcutsDialog',
-            explanation: (l) => l.ui.source.tour.shortcuts,
-        },
-    ];
+    $effect(() => {
+        const requested = tourRequest.id;
+        if (requested === undefined) return;
+        untrack(() => {
+            // Clear first: launching may change layout, and a request that
+            // outlived its launch would reopen the tour when it closed.
+            tourRequest.id = undefined;
+            launchTour(requested);
+        });
+    });
 
-    const projectTourSteps: UIExplanation[] = [
-        {
-            uiid: 'projectControls',
-            explanation: (l) => l.ui.project.tour.controls,
-        },
-        {
-            uiid: 'projectName',
-            explanation: (l) => l.ui.project.tour.name,
-        },
-        {
-            uiid: 'sourceToggle',
-            explanation: (l) => l.ui.project.tour.sourceToggle,
-        },
-        {
-            uiid: 'addSource',
-            explanation: (l) => l.ui.project.tour.addSource,
-        },
-        {
-            uiid: 'shareDialog',
-            explanation: (l) => l.ui.project.tour.share,
-        },
-        {
-            uiid: 'languagesButton',
-            explanation: (l) => l.ui.project.tour.languages,
-        },
-        {
-            uiid: 'checkpoints',
-            explanation: (l) => l.ui.project.tour.checkpoints,
-        },
-    ];
-
-    /** Programmatically click the docs section tab for the given index
-     * (0 = code/language, 1 = how-to). Tabbed listens to `pointerdown`, so a
-     * synthesized event is what actually triggers selection. */
-    function setDocsMode(index: number) {
-        const buttons = document.querySelectorAll<HTMLButtonElement>(
-            '[data-uiid="docsModeToggle"] button',
-        );
-        const target = buttons[index];
-        if (target && target.getAttribute('aria-selected') !== 'true')
-            target.dispatchEvent(
-                new PointerEvent('pointerdown', {
-                    bubbles: true,
-                    button: 0,
-                    pointerType: 'mouse',
-                }),
-            );
+    /** Open a tour, first doing whatever setup it needs to have something to
+     * point at. Preparation lives here rather than in the registry because it
+     * needs this view's layout and selection state. */
+    function launchTour(id: TourID) {
+        if (id === 'palette') preparePaletteTour();
+        else if (id === 'docs') revealTile(layout.getDocs());
+        openTour = id;
     }
 
-    const docsTourSteps: UIExplanation[] = [
-        { uiid: 'documentation', explanation: (l) => l.ui.docs.tour.guide },
-        {
-            uiid: 'documentation',
-            explanation: (l) => l.ui.docs.tour.code,
-            onEnter: () => setDocsMode(0),
-        },
-        {
-            uiid: 'documentation',
-            explanation: (l) => l.ui.docs.tour.howto,
-            onEnter: () => setDocsMode(1),
-        },
-        { uiid: 'docsModeToggle', explanation: (l) => l.ui.docs.tour.mode },
-        { uiid: 'docsSearch', explanation: (l) => l.ui.docs.tour.search },
-    ];
-
-    const paletteTourSteps: UIExplanation[] = [
-        { uiid: 'palette', explanation: (l) => l.ui.palette.tour.palette },
-        { uiid: 'paletteText', explanation: (l) => l.ui.palette.tour.text },
-        { uiid: 'paletteSet', explanation: (l) => l.ui.palette.tour.set },
-        { uiid: 'paletteUnset', explanation: (l) => l.ui.palette.tour.unset },
-        { uiid: 'editor', explanation: (l) => l.ui.palette.tour.editor },
-        { uiid: 'stage', explanation: (l) => l.ui.palette.tour.stage },
-    ];
-
-    const collaborateTourSteps: UIExplanation[] = [
-        {
-            uiid: 'collaborate',
-            explanation: (l) => l.ui.collaborate.tour.collaborate,
-        },
-        {
-            uiid: 'collaborators',
-            explanation: (l) => l.ui.collaborate.tour.collaborators,
-        },
-        {
-            uiid: 'commenters',
-            explanation: (l) => l.ui.collaborate.tour.commenters,
-        },
-        {
-            uiid: 'viewers',
-            explanation: (l) => l.ui.collaborate.tour.viewers,
-        },
-        {
-            uiid: 'restrictGallery',
-            explanation: (l) => l.ui.collaborate.tour.restrict,
-        },
-    ];
-
-    /** Open the palette tour, first selecting any Phrase in the project so
-     * the palette has properties to display. Falls back to highlighting the
-     * empty palette if no Phrase exists. */
-    function startPaletteTour() {
+    /** Select any Phrase in the project so the palette has properties to
+     * display, then open the palette. Falls back to the empty palette if the
+     * project has no Phrase. */
+    function preparePaletteTour() {
         for (const source of project.getSources()) {
             const phrases = source.root.root.nodes(
                 (node): node is Evaluate =>
@@ -1381,7 +1276,6 @@
         }
         // Selection no longer auto-opens the palette, so open it explicitly for the tour.
         revealPalette();
-        openTour = 'palette';
     }
 
     /** Get the store of how tos stored in the locales database. */
@@ -1817,15 +1711,90 @@
      *  stage no longer makes the tile pop in. A stage output invokes this (via context) on a
      *  double-click or Enter to explicitly open the palette for the selected content. */
     function revealPalette() {
-        const palette = layout.getPalette();
-        if (palette && palette.mode === TileMode.Collapsed)
-            setMode(palette, TileMode.Expanded);
+        revealTile(layout.getPalette());
     }
     setRevealPalette(revealPalette);
+
+    /** Expand a collapsed tile. A tour of a tile has nothing to point at while
+     *  the tile is closed, and it starts closed in an empty project and in the
+     *  tutorial. */
+    function revealTile(tile: Tile | undefined) {
+        if (tile && tile.mode === TileMode.Collapsed)
+            setMode(tile, TileMode.Expanded);
+    }
 
     /** Whether the palette is on screen; the palette itself sets this as it mounts and unmounts. */
     const paletteOpen = writable(false);
     setPaletteOpen(paletteOpen);
+
+    /** A marker in the code asks for a message; the conversation cannot show it
+     *  while its tile is shut. The chat clears the request once it has. */
+    $effect(() => {
+        if ($messageRequest !== undefined)
+            revealTile(layout.getTileWithID(TileKind.Collaborate));
+    });
+
+    /** Where every message's reference points right now, by message id.
+     *
+     *  The one place a reference is resolved. Re-derived rather than stored,
+     *  because a reference names a node by a path and what that path means
+     *  changes every time the program does — and resolved *here* because both
+     *  readers need the same answer: the gutter markers, to know which nodes
+     *  carry one, and the chip beside each message, to say which line. Resolving
+     *  is not free (a path that no longer lands on its own code falls back to
+     *  scanning the source), so resolving twice was paying twice per keystroke. */
+    let resolvedReferenceMap = $derived.by(() => {
+        const found = new Map<string, ResolvedReference>();
+        if (!chat) return found;
+        for (const message of chat.getMessages()) {
+            if (message.reference === undefined || message.text === null)
+                continue;
+            found.set(message.id, resolveReference(project, message.reference));
+        }
+        return found;
+    });
+
+    $effect(() => {
+        resolvedReferences.set(resolvedReferenceMap);
+    });
+
+    /** Where the message being written points and what to call it, so the editor
+     *  holding that code can say so in its footer. One pass over the sources
+     *  rather than two, since both answers come from finding the same one. */
+    let linked = $derived.by(() => {
+        const node = $linkedNode;
+        if (node === undefined) return undefined;
+        const index = project
+            .getSources()
+            .findIndex((source) => source.has(node));
+        if (index < 0) return undefined;
+        const lines = linesOfNode(project.getSources()[index], node);
+        return lines === undefined
+            ? undefined
+            : {
+                  tile: Layout.getSourceID(index),
+                  label: referenceLabel(
+                      $locales,
+                      lines.firstLine,
+                      lines.lastLine,
+                  ),
+              };
+    });
+
+    /** Which messages are about which code, for the marker each referenced
+     *  line and block carries in its gutter. Node identity is rebuilt with the
+     *  program, so this map genuinely differs on every edit; the guard against
+     *  needless downstream work is in RootView, whose map is keyed by line. */
+    $effect(() => {
+        const byNode = new Map<Node, string[]>();
+        for (const [id, resolved] of resolvedReferenceMap) {
+            if (resolved.state !== 'valid') continue;
+            const messages = byNode.get(resolved.node);
+            if (messages) messages.push(id);
+            else byNode.set(resolved.node, [id]);
+        }
+        referencedMessages.set(byNode);
+    });
 
     /** When the canvas size changes, resize the layout */
     $effect(() => {
@@ -1835,6 +1804,7 @@
     function refreshLayout() {
         layout = untrack(() => layout).resized(
             $arrangement,
+            $stagePlacement,
             canvasWidth,
             canvasHeight,
         );
@@ -1865,6 +1835,7 @@
     function adjustSplit(axis: number, index: number, split: number) {
         layout = layout.withSplit(
             $arrangement,
+            $stagePlacement,
             axis,
             index,
             split,
@@ -2087,7 +2058,12 @@
                 // Move the source to the end and make it visible.
                 layout = currentLayout
                     .withTileLast(latestSource)
-                    .resized($arrangement, canvasWidth, canvasHeight);
+                    .resized(
+                        $arrangement,
+                        $stagePlacement,
+                        canvasWidth,
+                        canvasHeight,
+                    );
             }
         }
     });
@@ -2245,7 +2221,7 @@
         // when it unmounts, which is every route.
         layout = layout
             .withTileLast(tile.withMode(mode))
-            .resized($arrangement, canvasWidth, canvasHeight);
+            .resized($arrangement, $stagePlacement, canvasWidth, canvasHeight);
     }
 
     function setFullscreen(tile: Tile | undefined) {
@@ -3098,7 +3074,7 @@
                                         icon={INFO_SYMBOL}
                                         uiid="stageTourLaunch"
                                         action={() => {
-                                            openTour = 'stage';
+                                            launchTour('stage');
                                         }}
                                     ></Button>
                                 {:else if tile.kind === TileKind.Source}
@@ -3108,7 +3084,7 @@
                                         icon={INFO_SYMBOL}
                                         uiid="sourceTourLaunch"
                                         action={() => {
-                                            openTour = 'source';
+                                            launchTour('source');
                                         }}
                                     ></Button>
                                 {:else if tile.kind === TileKind.Documentation}
@@ -3118,7 +3094,7 @@
                                         icon={INFO_SYMBOL}
                                         uiid="docsTourLaunch"
                                         action={() => {
-                                            openTour = 'docs';
+                                            launchTour('docs');
                                         }}
                                     ></Button>
                                 {:else if tile.kind === TileKind.Palette}
@@ -3127,7 +3103,7 @@
                                         background="circular"
                                         icon={INFO_SYMBOL}
                                         uiid="paletteTourLaunch"
-                                        action={startPaletteTour}
+                                        action={() => launchTour('palette')}
                                     ></Button>
                                 {:else if tile.kind === TileKind.Collaborate}
                                     <Button
@@ -3137,7 +3113,7 @@
                                         icon={INFO_SYMBOL}
                                         uiid="collaborateTourLaunch"
                                         action={() => {
-                                            openTour = 'collaborate';
+                                            launchTour('collaborate');
                                         }}
                                     ></Button>
                                 {/if}
@@ -3538,6 +3514,28 @@
                                                     />{/if}</EditorNotice
                                             >
                                         {/each}
+                                        <!-- What the message being written is
+                                             about, while it is about anything.
+                                             In the footer with the other
+                                             prompts, rather than over the code
+                                             it names. -->
+                                        {#if linked !== undefined && linked.tile === tile.id}
+                                            <EditorNotice
+                                                ><MarkupHTMLView
+                                                    inline
+                                                    markup={[
+                                                        (l) =>
+                                                            l.ui.collaborate
+                                                                .reference
+                                                                .prompt,
+                                                        {
+                                                            location:
+                                                                linked.label,
+                                                        },
+                                                    ]}
+                                                /></EditorNotice
+                                            >
+                                        {/if}
                                         <!-- The clipboard's current contents, shown on the
                                              selected editor so it appears once. The close
                                              button clears Wordplay's clipboard. -->
@@ -3658,7 +3656,7 @@
                 {/each}
                 <!-- If in a layout that supports resizing, create an adjuster for each axis split in the current layout that isn't the first in the axis. Skip when a tile is fullscreen, since there's nothing to resize. -->
                 {#if isResizeable(currentArrangement) && !layout.isFullscreen()}
-                    {#each layout.getSplits(currentArrangement, canvasWidth, canvasHeight) ?? [] as axis, axisIndex}
+                    {#each layout.getSplits(currentArrangement, $stagePlacement, canvasWidth, canvasHeight) ?? [] as axis, axisIndex}
                         {#each axis.positions as _, groupIndex}
                             {#if groupIndex > 0}
                                 <PositionAdjuster
@@ -3718,9 +3716,7 @@
             {revert}
             {addSource}
             {toggleTile}
-            launchTour={() => {
-                openTour = 'project';
-            }}
+            launchTour={() => launchTour('project')}
             bind:checkpoint
         />
 
@@ -3755,41 +3751,17 @@
     {/if}
 </main>
 
-{#if openTour === 'stage'}
+{#if openTour !== undefined}
     <Tour
-        explanations={stageTourSteps}
-        subheader={(l) => l.ui.tile.label.output}
-        close={() => (openTour = undefined)}
-    />
-{:else if openTour === 'source'}
-    <Tour
-        explanations={sourceTourSteps}
-        subheader={(l) => l.ui.tile.label.source}
-        close={() => (openTour = undefined)}
-    />
-{:else if openTour === 'docs'}
-    <Tour
-        explanations={docsTourSteps}
-        subheader={(l) => l.ui.tile.label.docs}
-        close={() => (openTour = undefined)}
-    />
-{:else if openTour === 'palette'}
-    <Tour
-        explanations={paletteTourSteps}
-        subheader={(l) => l.ui.tile.label.palette}
-        close={() => (openTour = undefined)}
-    />
-{:else if openTour === 'collaborate'}
-    <Tour
-        explanations={collaborateTourSteps}
-        subheader={(l) => l.ui.tile.label.collaborate}
-        close={() => (openTour = undefined)}
-    />
-{:else if openTour === 'project'}
-    <Tour
-        explanations={projectTourSteps}
-        subheader={(l) => l.ui.project.label}
-        close={() => (openTour = undefined)}
+        explanations={TourSteps[openTour]}
+        subheader={Tours[openTour].subheader}
+        close={() => {
+            // Closing is what counts as having taken it, wherever it was
+            // launched from, so the tutorial never holds someone at a tour
+            // they've already seen from a tile's ⓘ button.
+            if (openTour !== undefined) Settings.markTourTaken(openTour);
+            openTour = undefined;
+        }}
     />
 {/if}
 

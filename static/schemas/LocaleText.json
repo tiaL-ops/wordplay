@@ -3546,6 +3546,9 @@
                         "documentation": {
                             "$ref": "#/definitions/GlossaryText"
                         },
+                        "editor": {
+                            "$ref": "#/definitions/GlossaryText"
+                        },
                         "element": {
                             "$ref": "#/definitions/GlossaryText"
                         },
@@ -3618,6 +3621,9 @@
                         "sideEffect": {
                             "$ref": "#/definitions/GlossaryText"
                         },
+                        "stage": {
+                            "$ref": "#/definitions/GlossaryText"
+                        },
                         "start": {
                             "$ref": "#/definitions/GlossaryText"
                         },
@@ -3665,6 +3671,8 @@
                         "how",
                         "gallery",
                         "blocks",
+                        "editor",
+                        "stage",
                         "placeholder",
                         "conflict",
                         "checkpoint",
@@ -6974,6 +6982,10 @@
                                             "$ref": "#/definitions/Template%3C%5B%22concept%22%5D%3E",
                                             "description": "[formatted] Description when the reference is a how-to (e.g."
                                         },
+                                        "tour": {
+                                            "$ref": "#/definitions/Template%3C%5B%22concept%22%5D%3E",
+                                            "description": "[formatted] Description when the reference is an interface tour (e.g."
+                                        },
                                         "ui": {
                                             "$ref": "#/definitions/Template%3C%5B%22concept%22%5D%3E",
                                             "description": "[formatted] Description when the reference is a UI element (e.g."
@@ -6982,6 +6994,7 @@
                                     "required": [
                                         "codepoint",
                                         "ui",
+                                        "tour",
                                         "how",
                                         "character"
                                     ],
@@ -16716,14 +16729,51 @@
                             "properties": {
                                 "announce": {
                                     "additionalProperties": false,
-                                    "description": "Announcements made as collaboration changes",
+                                    "description": "Announcements made as collaboration changes. Each names the person, since an announcement that reads the same twice running is heard once and then sounds broken.",
                                     "properties": {
+                                        "attached": {
+                                            "$ref": "#/definitions/Template%3C%5B%22location%22%5D%3E",
+                                            "description": "[plain] Said when code is attached to the message being written. $location is the line or lines."
+                                        },
+                                        "found": {
+                                            "$ref": "#/definitions/Template%3C%5B%22name%22%2C%22opening%22%5D%3E",
+                                            "description": "[plain] Said when a marker in the code takes the reader to what was said about it. $name is who said it, $opening how it starts."
+                                        },
+                                        "privilege": {
+                                            "$ref": "#/definitions/Template%3C%5B%22name%22%2C%22privilege%22%5D%3E",
+                                            "description": "[plain] Said when someone's privilege changes. $name is that person, $privilege what they may now do."
+                                        },
+                                        "reacted": {
+                                            "$ref": "#/definitions/Template%3C%5B%22emoji%22%2C%22%23count%22%5D%3E",
+                                            "description": "[plain] Said when a reaction is added. $emoji is the emoji, $#count how many people have now chosen it."
+                                        },
+                                        "removed": {
+                                            "$ref": "#/definitions/Template%3C%5B%22name%22%5D%3E",
+                                            "description": "[plain] Said when someone is taken off the project. $name is that person."
+                                        },
+                                        "thread": {
+                                            "$ref": "#/definitions/Template%3C%5B%22name%22%2C%22%23count%22%5D%3E",
+                                            "description": "[plain] Said when a thread is opened. $name is who wrote the message it is about, $#count how many replies it has."
+                                        },
                                         "transferred": {
                                             "$ref": "#/definitions/Template%3C%5B%22name%22%2C%22project%22%5D%3E",
                                             "description": "[plain] Said when the project is handed to a new owner"
+                                        },
+                                        "unreacted": {
+                                            "$ref": "#/definitions/Template%3C%5B%22emoji%22%2C%22%23count%22%5D%3E",
+                                            "description": "[plain] Said when a reaction is taken back. $emoji is the emoji, $#count how many people are left."
                                         }
                                     },
-                                    "required": ["transferred"],
+                                    "required": [
+                                        "transferred",
+                                        "privilege",
+                                        "removed",
+                                        "thread",
+                                        "reacted",
+                                        "unreacted",
+                                        "attached",
+                                        "found"
+                                    ],
                                     "type": "object"
                                 },
                                 "button": {
@@ -16738,22 +16788,37 @@
                                             "description": "[plain] The message delete button",
                                             "type": "string"
                                         },
-                                        "start": {
-                                            "$ref": "#/definitions/ButtonText",
-                                            "description": "The start a chat button"
-                                        },
                                         "submit": {
                                             "$ref": "#/definitions/ButtonText",
                                             "description": "The chat send button"
                                         },
                                         "transfer": {
-                                            "$ref": "#/definitions/ConfirmText",
-                                            "description": "The button that hands ownership of the project to a collaborator"
+                                            "additionalProperties": false,
+                                            "description": "The button that hands ownership of the project to a collaborator. Its `prompt` is the button's own label, so it stays short enough not to stretch the row it sits in; what it costs you is said beside it.",
+                                            "properties": {
+                                                "consequence": {
+                                                    "description": "[plain] What the owner gives up by handing the project over",
+                                                    "type": "string"
+                                                },
+                                                "description": {
+                                                    "description": "[plain] The tooltip and ARIA-label for the button",
+                                                    "type": "string"
+                                                },
+                                                "prompt": {
+                                                    "description": "[plain] The confirmation prompt to show after clicked the first time.",
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "consequence",
+                                                "description",
+                                                "prompt"
+                                            ],
+                                            "type": "object"
                                         }
                                     },
                                     "required": [
                                         "submit",
-                                        "start",
                                         "delete",
                                         "confirmDelete",
                                         "transfer"
@@ -16865,36 +16930,99 @@
                                     "type": "object"
                                 },
                                 "prompt": {
+                                    "description": "[plain] Shown above the add field while nobody has been added yet, saying what the tile is for",
+                                    "type": "string"
+                                },
+                                "reaction": {
                                     "additionalProperties": false,
-                                    "description": "Messages to explain the purpose of the chat to each kind of participant",
+                                    "description": "Reacting to a message with an emoji",
                                     "properties": {
-                                        "collaborator": {
-                                            "description": "[plain] Shown to collaborators; describes their editing and chat permissions",
+                                        "add": {
+                                            "description": "[plain] Button that opens the reaction chooser",
                                             "type": "string"
                                         },
-                                        "commenter": {
-                                            "description": "[plain] Shown to commenters; describes their chat-only permissions",
+                                        "close": {
+                                            "description": "[plain] The same button once the chooser is open, when pressing it closes it again",
                                             "type": "string"
                                         },
-                                        "curator": {
-                                            "description": "[plain] Shown to gallery curators; describes their editing and chat permissions",
+                                        "full": {
+                                            "description": "[plain] Shown when a message has collected as many different reactions as it can hold",
                                             "type": "string"
                                         },
-                                        "owner": {
-                                            "description": "[plain] Shown to the project owner; describes what collaborators and commenters can do",
+                                        "give": {
+                                            "$ref": "#/definitions/Template%3C%5B%22emoji%22%2C%22%23count%22%5D%3E",
+                                            "description": "[plain] A reaction you have not chosen, so pressing adds yours. $emoji names the emoji, $#count is how many people have chosen it."
+                                        },
+                                        "label": {
+                                            "description": "[plain] The accessible name of the reaction chooser",
                                             "type": "string"
                                         },
-                                        "solo": {
-                                            "description": "[plain] Shown when the user is the only participant; invites them to add collaborators",
+                                        "more": {
+                                            "description": "[plain] Button that opens the whole emoji chooser, for a reaction not offered",
                                             "type": "string"
+                                        },
+                                        "pick": {
+                                            "$ref": "#/definitions/Template%3C%5B%22emoji%22%5D%3E",
+                                            "description": "[plain] One of the reactions offered without a search. $emoji names it."
+                                        },
+                                        "take": {
+                                            "$ref": "#/definitions/Template%3C%5B%22emoji%22%2C%22%23count%22%5D%3E",
+                                            "description": "[plain] A reaction you have chosen, so pressing takes yours back. $emoji names the emoji, $#count is how many people have chosen it."
                                         }
                                     },
                                     "required": [
-                                        "solo",
-                                        "owner",
-                                        "collaborator",
-                                        "curator",
-                                        "commenter"
+                                        "add",
+                                        "close",
+                                        "more",
+                                        "label",
+                                        "pick",
+                                        "give",
+                                        "take",
+                                        "full"
+                                    ],
+                                    "type": "object"
+                                },
+                                "reference": {
+                                    "additionalProperties": false,
+                                    "description": "Saying which code a message is about",
+                                    "properties": {
+                                        "invalid": {
+                                            "description": "[plain] Shown in place of a reference whose code is no longer there",
+                                            "type": "string"
+                                        },
+                                        "label": {
+                                            "$ref": "#/definitions/Template%3C%5B%22location%22%2C%22code%22%5D%3E",
+                                            "description": "[plain] The accessible name of a reference in a message. $location is the line or lines it names, $code the code that is there now."
+                                        },
+                                        "line": {
+                                            "$ref": "#/definitions/Template%3C%5B%22line%22%5D%3E",
+                                            "description": "[plain] Names one line of code. $line is its number."
+                                        },
+                                        "lines": {
+                                            "$ref": "#/definitions/Template%3C%5B%22first%22%2C%22last%22%5D%3E",
+                                            "description": "[plain] Names a run of lines. $first and $last are their numbers."
+                                        },
+                                        "marker": {
+                                            "$ref": "#/definitions/Template%3C%5B%22%23count%22%5D%3E",
+                                            "description": "[plain] The marker in the code's gutter that leads to what was said about it. $#count is how many messages are about this code."
+                                        },
+                                        "mode": {
+                                            "$ref": "#/definitions/ToggleText",
+                                            "description": "The control on the message being written that says it is about wherever the caret is in the code. Pressing it again takes the link back; there is nothing else to press."
+                                        },
+                                        "prompt": {
+                                            "$ref": "#/definitions/Template%3C%5B%22location%22%5D%3E",
+                                            "description": "[formatted] Shown in the editor holding the code the message being written is about. $location is the line or lines."
+                                        }
+                                    },
+                                    "required": [
+                                        "mode",
+                                        "prompt",
+                                        "line",
+                                        "lines",
+                                        "label",
+                                        "invalid",
+                                        "marker"
                                     ],
                                     "type": "object"
                                 },
@@ -16902,48 +17030,128 @@
                                     "additionalProperties": false,
                                     "description": "Controls for restricting project visibility when it is in a gallery",
                                     "properties": {
-                                        "explanation": {
-                                            "$ref": "#/definitions/FormattedText",
-                                            "description": "[formatted] Explains that the project is in a gallery and describes the visibility restriction option"
-                                        },
                                         "mode": {
                                             "$ref": "#/definitions/ModeText%3C%5Bstring%2Cstring%5D%3E",
                                             "description": "The toggle mode for restricting project visibility to owner and curators only"
                                         }
                                     },
-                                    "required": ["explanation", "mode"],
+                                    "required": ["mode"],
                                     "type": "object"
                                 },
                                 "role": {
                                     "additionalProperties": false,
+                                    "description": "What each person in the project may do. These name a privilege, not a kind of person, so they read both as a cell in the table of people and as an option in the picker that changes one.",
                                     "properties": {
-                                        "collaborators": {
-                                            "description": "[plain] What to call collaborators",
+                                        "collaborate": {
+                                            "description": "[plain] The privilege of someone who may edit the project and chat about it",
                                             "type": "string"
                                         },
-                                        "commenters": {
-                                            "description": "[plain] What to call commenters",
+                                        "comment": {
+                                            "description": "[plain] The privilege of someone who may chat about the project but not edit it",
                                             "type": "string"
                                         },
-                                        "curators": {
-                                            "description": "[plain] What to call curators",
+                                        "curate": {
+                                            "description": "[plain] The privilege of a curator of the gallery the project is in, which the project's owner cannot change",
                                             "type": "string"
                                         },
                                         "owner": {
-                                            "description": "[plain] What to call the owner of a project",
+                                            "description": "[plain] The privilege of the person who owns the project",
                                             "type": "string"
                                         },
-                                        "viewers": {
-                                            "description": "[plain] What to call viewers",
+                                        "view": {
+                                            "description": "[plain] The privilege of someone who may look at the project but not chat or edit",
                                             "type": "string"
                                         }
                                     },
                                     "required": [
                                         "owner",
-                                        "collaborators",
-                                        "curators",
-                                        "commenters",
-                                        "viewers"
+                                        "collaborate",
+                                        "comment",
+                                        "view",
+                                        "curate"
+                                    ],
+                                    "type": "object"
+                                },
+                                "table": {
+                                    "additionalProperties": false,
+                                    "description": "The table of everyone who can reach the project",
+                                    "properties": {
+                                        "add": {
+                                            "description": "[plain] The button at the end of the table that shows the field for adding someone",
+                                            "type": "string"
+                                        },
+                                        "adding": {
+                                            "description": "[plain] The accessible name of the picker that chooses what a person being added may do",
+                                            "type": "string"
+                                        },
+                                        "audience": {
+                                            "description": "[plain] The accessible name of the row of people, shown in place of the table while a message is being written, who can see the chat",
+                                            "type": "string"
+                                        },
+                                        "cancel": {
+                                            "description": "[plain] The same button once the field is showing, when pressing it puts the field away",
+                                            "type": "string"
+                                        },
+                                        "choose": {
+                                            "$ref": "#/definitions/Template%3C%5B%22name%22%5D%3E",
+                                            "description": "[plain] The accessible name of the picker that changes one person's privilege. $name is that person."
+                                        },
+                                        "label": {
+                                            "description": "[plain] The accessible name of the table listing everyone who can reach the project",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "label",
+                                        "choose",
+                                        "adding",
+                                        "add",
+                                        "cancel",
+                                        "audience"
+                                    ],
+                                    "type": "object"
+                                },
+                                "thread": {
+                                    "additionalProperties": false,
+                                    "description": "Replying to one message, instead of to the room",
+                                    "properties": {
+                                        "back": {
+                                            "description": "[plain] Button that leaves a thread and returns to the conversation",
+                                            "type": "string"
+                                        },
+                                        "empty": {
+                                            "description": "[plain] Shown in an open thread that has no replies yet",
+                                            "type": "string"
+                                        },
+                                        "header": {
+                                            "description": "[plain] Header above an open thread",
+                                            "type": "string"
+                                        },
+                                        "placeholder": {
+                                            "description": "[plain] The message field's placeholder while writing in a thread",
+                                            "type": "string"
+                                        },
+                                        "replies": {
+                                            "$ref": "#/definitions/Template%3C%5B%22%23count%22%5D%3E",
+                                            "description": "[plain] Button that opens a message's thread. $#count is how many replies it has."
+                                        },
+                                        "reply": {
+                                            "description": "[plain] Button that starts a thread on a message that has none",
+                                            "type": "string"
+                                        },
+                                        "unseen": {
+                                            "$ref": "#/definitions/Template%3C%5B%22%23count%22%5D%3E",
+                                            "description": "[plain] Tip on a thread that has replies this reader hasn't seen. $#count is how many are new."
+                                        }
+                                    },
+                                    "required": [
+                                        "reply",
+                                        "replies",
+                                        "unseen",
+                                        "header",
+                                        "back",
+                                        "empty",
+                                        "placeholder"
                                     ],
                                     "type": "object"
                                 },
@@ -16951,17 +17159,17 @@
                                     "additionalProperties": false,
                                     "description": "Interactive tour explaining the collaborate tile",
                                     "properties": {
+                                        "add": {
+                                            "$ref": "#/definitions/FormattedText",
+                                            "description": "[formatted] Markup describing the field that adds someone to the project"
+                                        },
                                         "collaborate": {
                                             "$ref": "#/definitions/FormattedText",
                                             "description": "[formatted] Markup describing the collaborate panel"
                                         },
                                         "collaborators": {
                                             "$ref": "#/definitions/FormattedText",
-                                            "description": "[formatted] Markup describing the collaborators field"
-                                        },
-                                        "commenters": {
-                                            "$ref": "#/definitions/FormattedText",
-                                            "description": "[formatted] Markup describing the commenters field"
+                                            "description": "[formatted] Markup describing the table of people and what each privilege means"
                                         },
                                         "launch": {
                                             "description": "[plain] Tooltip on the help button that opens the tour",
@@ -16970,18 +17178,13 @@
                                         "restrict": {
                                             "$ref": "#/definitions/FormattedText",
                                             "description": "[formatted] Markup describing the restrict-gallery toggle"
-                                        },
-                                        "viewers": {
-                                            "$ref": "#/definitions/FormattedText",
-                                            "description": "[formatted] Markup describing the viewers field"
                                         }
                                     },
                                     "required": [
                                         "launch",
                                         "collaborate",
                                         "collaborators",
-                                        "commenters",
-                                        "viewers",
+                                        "add",
                                         "restrict"
                                     ],
                                     "type": "object"
@@ -17006,10 +17209,6 @@
                                             "$ref": "#/definitions/Template%3C%5B%22to%22%5D%3E",
                                             "description": "[formatted] Shown when the conversation couldn't be translated. $to is the language it was being translated into."
                                         },
-                                        "fewerLanguages": {
-                                            "description": "[plain] Tip on the button that hides the language search field",
-                                            "type": "string"
-                                        },
                                         "label": {
                                             "description": "[plain] Label on the picker that chooses what language to read messages in",
                                             "type": "string"
@@ -17022,17 +17221,9 @@
                                             "$ref": "#/definitions/Template%3C%5B%22%23count%22%5D%3E",
                                             "description": "[plain] Announced when messages couldn't be translated. $#count is how many."
                                         },
-                                        "moreLanguages": {
-                                            "description": "[plain] Tip on the button that reveals a search field for languages beyond the ones already in this conversation",
-                                            "type": "string"
-                                        },
                                         "none": {
                                             "description": "[plain] The picker's first option, meaning don't translate — both the state it starts in and the way back to it",
                                             "type": "string"
-                                        },
-                                        "nothing": {
-                                            "$ref": "#/definitions/Template%3C%5B%22to%22%5D%3E",
-                                            "description": "[formatted] Shown when a language is chosen but there is nothing here to translate into it. $to is that language."
                                         },
                                         "off": {
                                             "description": "[plain] Button that stops a translation that is still running",
@@ -17060,15 +17251,12 @@
                                         "none",
                                         "off",
                                         "dismiss",
-                                        "moreLanguages",
-                                        "fewerLanguages",
                                         "writingIn",
                                         "translating",
                                         "downloading",
                                         "translated",
                                         "direction",
                                         "onDevice",
-                                        "nothing",
                                         "error",
                                         "messageError",
                                         "messageErrors"
@@ -17080,12 +17268,16 @@
                                 "label",
                                 "translate",
                                 "field",
+                                "thread",
+                                "reaction",
+                                "reference",
+                                "prompt",
                                 "role",
+                                "table",
                                 "button",
                                 "moderation",
                                 "error",
                                 "announce",
-                                "prompt",
                                 "restrictGalleryCreatorAccess",
                                 "tour"
                             ],
@@ -17733,6 +17925,10 @@
                                                     "$ref": "#/definitions/ModeText%3C%5Bstring%2Cstring%2Cstring%5D%3E",
                                                     "description": "How loud music is: off, quiet, or full"
                                                 },
+                                                "placement": {
+                                                    "$ref": "#/definitions/ModeText%3C%5Bstring%2Cstring%2Cstring%2Cstring%5D%3E",
+                                                    "description": "Where the stage sits in the layouts that lay tiles out on axes, which mirrors the other tiles around it"
+                                                },
                                                 "space": {
                                                     "$ref": "#/definitions/ModeText%3C%5Bstring%2Cstring%5D%3E",
                                                     "description": "The space_indicator on/off mode"
@@ -17756,6 +17952,7 @@
                                             },
                                             "required": [
                                                 "layout",
+                                                "placement",
                                                 "animate",
                                                 "dark",
                                                 "adaptOutput",
@@ -22682,6 +22879,22 @@
                                                 "noResults"
                                             ],
                                             "type": "object"
+                                        },
+                                        "tour": {
+                                            "additionalProperties": false,
+                                            "description": "A step that hands the learner to a tour of the interface before it goes on",
+                                            "properties": {
+                                                "skip": {
+                                                    "description": "[plain] Label for the control that moves on without taking the tour",
+                                                    "type": "string"
+                                                },
+                                                "wait": {
+                                                    "description": "[plain] Spoken when the next control is pressed before the tour has been taken",
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": ["skip", "wait"],
+                                            "type": "object"
                                         }
                                     },
                                     "required": [
@@ -22693,6 +22906,7 @@
                                         "mode",
                                         "contrast",
                                         "button",
+                                        "tour",
                                         "options",
                                         "search"
                                     ],
@@ -27850,6 +28064,12 @@
         "Template<[\"duplicate\"]>": {
             "type": "string"
         },
+        "Template<[\"emoji\",\"#count\"]>": {
+            "type": "string"
+        },
+        "Template<[\"emoji\"]>": {
+            "type": "string"
+        },
         "Template<[\"expected\",\"given\"]>": {
             "type": "string"
         },
@@ -27863,6 +28083,9 @@
             "type": "string"
         },
         "Template<[\"face\",\"format\"]>": {
+            "type": "string"
+        },
+        "Template<[\"first\",\"last\"]>": {
             "type": "string"
         },
         "Template<[\"first\",\"second\"]>": {
@@ -27955,6 +28178,9 @@
         "Template<[\"left\"]>": {
             "type": "string"
         },
+        "Template<[\"line\"]>": {
+            "type": "string"
+        },
         "Template<[\"list\",\"index\"]>": {
             "type": "string"
         },
@@ -27962,6 +28188,12 @@
             "type": "string"
         },
         "Template<[\"locale\"]>": {
+            "type": "string"
+        },
+        "Template<[\"location\",\"code\"]>": {
+            "type": "string"
+        },
+        "Template<[\"location\"]>": {
             "type": "string"
         },
         "Template<[\"low\",\"high\"]>": {
@@ -27977,6 +28209,9 @@
             "type": "string"
         },
         "Template<[\"modifier\",\"color\"]>": {
+            "type": "string"
+        },
+        "Template<[\"name\",\"#count\"]>": {
             "type": "string"
         },
         "Template<[\"name\",\"#lines\"]>": {
@@ -28004,6 +28239,12 @@
             "type": "string"
         },
         "Template<[\"name\",\"layout\",\"pose\",\"color\"]>": {
+            "type": "string"
+        },
+        "Template<[\"name\",\"opening\"]>": {
+            "type": "string"
+        },
+        "Template<[\"name\",\"privilege\"]>": {
             "type": "string"
         },
         "Template<[\"name\",\"project\"]>": {

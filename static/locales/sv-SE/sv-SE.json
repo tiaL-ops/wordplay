@@ -171,6 +171,14 @@
         "column": {
             "word": "$~kolumn",
             "definition": "$~Ett namngivet fält i en @Table."
+        },
+        "editor": {
+            "word": "$~redigerare",
+            "definition": "$~Rutan där du skriver @code. Det du skriver där är det @wordplay utför."
+        },
+        "stage": {
+            "word": "$~scen",
+            "definition": "$~Utrymmet där @wordplay visar vad din @code har gjort."
         }
     },
     "terms": {},
@@ -541,7 +549,8 @@
                 "codepoint": "$~Unicode-tecknet $concept",
                 "ui": "$~en länk till gränssnittselementet $concept",
                 "how": "$~en länk till $concept -instruktionerna",
-                "character": "$~det anpassade $concept"
+                "character": "$~det anpassade $concept",
+                "tour": "$~en länk till en visning av $concept"
             }
         },
         "Words": {
@@ -1950,7 +1959,7 @@
             "name": "$~tabelltyp",
             "description": "$~tabell",
             "emotion": "angry",
-            "doc": "$~Jag representerar ett bord.",
+            "doc": "$~Jag representerar ett @Table.",
             "conflict": {
                 "ExpectedColumnType": {
                     "name": "$~saknad kolumntyp",
@@ -7512,7 +7521,7 @@
             "label": "$~konflikter och hjälp",
             "cursor": "$~Detta är *$node*$type[ och de är en $type|].",
             "cursorDoc": "$~De säger: ”$description”",
-            "cursorParent": "$~De är inuti en *$node*$type[ av typen $type|].",
+            "cursorParent": "$~De finns inuti en *$node*$type[, som blir till ett $type|].[Ett]{|Inga}",
             "learn": "$~/Läs mer/",
             "evaluating": "$~Åh kul, låt oss utvärdera!",
             "space": "$~Det här är utrymme! Vem visste att ingenting kunde säga så mycket?",
@@ -7995,7 +8004,7 @@
                 },
                 "field": {
                     "emailOrUsername": {
-                        "placeholder": "$~e-post eller användarnamn",
+                        "placeholder": "$~e-post/användarnamn",
                         "description": "$~e-post eller användarnamn för den person som du vill ge redigeringsbehörighet"
                     },
                     "preview": {
@@ -8287,6 +8296,21 @@
                             "$~Gör inget ljud när utdata krockar",
                             "$~Spela upp ett kort ljud när utdata krockar, högre ju hårdare krocken är"
                         ]
+                    },
+                    "placement": {
+                        "label": "$~scenens placering",
+                        "labels": [
+                            "$~uppe till vänster",
+                            "$~uppe till höger",
+                            "$~nere till vänster",
+                            "$~nere till höger"
+                        ],
+                        "tips": [
+                            "$~placera scenen uppe till vänster, och de andra rutorna på matchande platser runt den",
+                            "$~placera scenen uppe till höger, och de andra rutorna på matchande platser runt den",
+                            "$~placera scenen nere till vänster, och de andra rutorna på matchande platser runt den",
+                            "$~placera scenen nere till höger, och de andra rutorna på matchande platser runt den"
+                        ]
                     }
                 },
                 "options": {
@@ -8472,10 +8496,10 @@
             "label": "$~samarbeta",
             "role": {
                 "owner": "$~ägare",
-                "collaborators": "$~medarbetare (redigera och chatta)",
-                "curators": "$~kuratorer",
-                "commenters": "$~kommentatorer (bara chatta)",
-                "viewers": "$~tittare"
+                "collaborate": "$~samarbeta",
+                "comment": "$~kommentera",
+                "view": "$~visa",
+                "curate": "$~kurera"
             },
             "field": {
                 "message": {
@@ -8488,15 +8512,12 @@
                     "label": "$~skicka",
                     "tip": "$~skicka ett meddelande till dina medarbetare och"
                 },
-                "start": {
-                    "label": "$~starta en chatt",
-                    "tip": "$~börja ett samtal med dig själv eller andra."
-                },
                 "delete": "$~radera detta meddelande",
                 "confirmDelete": "$~bekräfta borttagning?",
                 "transfer": {
                     "description": "$~gör denna person till ägare av projektet",
-                    "prompt": "$~Vill du göra dem till ägare? Du förblir en medarbetare och kan fortsätta redigera, men du kommer inte längre kunna ta bort detta projekt."
+                    "prompt": "$~Göra dem till ägare?",
+                    "consequence": "$~Du förblir medarbetare och kan fortsätta redigera, men du kan inte längre ta bort detta projekt."
                 }
             },
             "error": {
@@ -8505,13 +8526,6 @@
                 "empty": "$~Inga meddelanden.",
                 "deleted": "$~Detta meddelande raderades.",
                 "transferGallery": "$~Det här projektet finns i ett galleri. Att ge det till någon annan lägger inte till dem i det galleriet, så de kanske inte kan se det där."
-            },
-            "prompt": {
-                "solo": "$~Chatta med dig själv eller lägg till...",
-                "owner": "$~Medarbetare kan redigera detta projekt och chatta om det. Kommentatorer kan chatta men kan inte redigera detta projekt. Tittare kan se detta projekt men kan inte chatta.",
-                "collaborator": "$~Du är en kollaboratör. Du kan redigera det här projektet och chatta om det.",
-                "curator": "$~Du är en kurator för detta projekts galleri. Du kan redigera detta projekt och chatta om det. Bara projektets ägare, medarbetare och kommentatorer kan se chatten.",
-                "commenter": "$~Du är en kommentator. Du kan chatta om det här projektet men inte redigera det."
             },
             "moderation": {
                 "header": "$~Rapportera det här meddelandet",
@@ -8529,7 +8543,6 @@
                 "inGallery": "$~Den här chatten finns i ett galleri. Den modereras av galleriets kuratorer. Du kan rapportera meddelanden som bryter mot våra <community standards@://rights> för moderering."
             },
             "restrictGalleryCreatorAccess": {
-                "explanation": "$~Ditt projekt finns i ett galleri. Som standard kan alla som kan se det här galleriet se det här projektet. Du kan begränsa vem som kan se ditt projekt till bara du och galleriets kuratorer.",
                 "mode": {
                     "label": "$~begränsa åtkomst till projektet",
                     "labels": ["$~begränsa inte", "$~begränsa"],
@@ -8541,11 +8554,25 @@
             },
             "tour": {
                 "launch": "$~ta en rundtur i samarbetet",
-                "collaborate": "$~Projekt kan /delas/ med andra personer, och du kan *chatta* med alla som projektet delas med här.",
-                "collaborators": "$~/Samarbetare/ kan *redigera* projektet och *chatta* om det med dig.",
-                "commenters": "$~/Kommentatorer/ kan *diskutera* projektet med dig, men de kan inte *redigera* det.",
-                "viewers": "$~/Tittare/ kan *se* projektet och dess *kod*, men de kan inte *diskutera* eller *redigera* det.",
-                "restrict": "$~När ett projekt finns i ett *galleri* kan som standard *alla* som kan se galleriet se ditt projekt. /restrict/-knappen *döljer* det för alla utom dig och galleriets kuratorer."
+                "collaborate": "$~Alla som kan nå detta projekt visas här, och du kan *chatta* med dem som får det. Bara /ägaren/, /medarbetarna/ och /kommentatorerna/ kan se chatten.",
+                "collaborators": "$~Varje person har en /rättighet/. *Samarbeta* betyder att de kan redigera projektet och chatta om det. *Kommentera* betyder att de kan chatta men inte redigera. *Visa* betyder att de kan titta men inte chatta. *Ägare* ger dem projektet. Ett galleris /kuratorer/ kan alltid nå det, så du kan inte ändra deras rättighet.",
+                "restrict": "$~När ett projekt finns i ett *galleri* kan som standard *alla* som kan se galleriet se ditt projekt. /restrict/-knappen *döljer* det för alla utom dig och galleriets kuratorer.",
+                "add": "$~Tryck på *+* i slutet av listan för att lägga till någon. Skriv deras *e-post* eller *användarnamn*, välj vad de får göra, så läggs de till i listan."
+            },
+            "translate": {
+                "label": "$~Översätt meddelanden till",
+                "off": "$~Sluta översätta",
+                "error": "$~Vi kunde inte översätta dessa meddelanden till $to. Försök igen om en liten stund.",
+                "messageError": "$~Vi kunde inte översätta detta meddelande.",
+                "direction": "$from → $to",
+                "messageErrors": "$~$#count[Vi kunde inte översätta $count meddelande.|Vi kunde inte översätta $count meddelanden.]",
+                "translating": "$~Översätter meddelanden…",
+                "translated": "$~$#count[Översatte $count meddelande till $language.|Översatte $count meddelanden till $language.]",
+                "writingIn": "$~Jag skriver på",
+                "downloading": "$~Hämtar en $language-översättare för din webbläsare…",
+                "onDevice": "$~Din webbläsare översatte dessa på din enhet, så inga meddelanden skickades till oss.",
+                "none": "$~Översätt inte",
+                "dismiss": "$~stäng"
             },
             "translate": {
                 "label": "$~Översätt meddelanden till",
@@ -8566,7 +8593,54 @@
                 "nothing": "$~Det finns inget här att översätta till $to. Vi översätter aldrig dina egna meddelanden."
             },
             "announce": {
-                "transferred": "$~$name är nu ägare av $project"
+                "transferred": "$~$name är nu ägare av $project",
+                "privilege": "$~$name kan nu $privilege",
+                "removed": "$~$name kan inte längre nå detta projekt",
+                "thread": "$~$#count[Tråd på $name's meddelande, $count svar|Tråd på $name's meddelande, $count svar]",
+                "reacted": "$~$#count[$emoji på det här meddelandet, $count person|$emoji på det här meddelandet, $count personer]",
+                "unreacted": "$~$#count[Tog tillbaka $emoji, $count person lämnade|Tog tillbaka $emoji, $count personer lämnade]",
+                "attached": "$~Pratar om $location.",
+                "found": "$~$name sa $opening"
+            },
+            "table": {
+                "label": "$~vem som kan nå detta projekt",
+                "choose": "$~vad $name får göra",
+                "adding": "$~vad de får göra",
+                "audience": "$~vem som kan se denna chatt",
+                "add": "$~lägg till någon",
+                "cancel": "$~strunt i att lägga till någon"
+            },
+            "prompt": "$~Lägg till medarbetare, kommentatorer och tittare",
+            "thread": {
+                "reply": "$~svara",
+                "replies": "$~$#count[$count svar|$count svar]",
+                "unseen": "$~$#count[$count nytt svar|$count nya svar]",
+                "header": "$~Tråd",
+                "back": "$~tillbaka till samtalet",
+                "empty": "$~Inga svar än. Säg något!",
+                "placeholder": "$~Svara…"
+            },
+            "reaction": {
+                "add": "$~reagera",
+                "more": "$~mer…",
+                "label": "$~Välj en reaktion",
+                "full": "$~Det här meddelandet har alla reaktioner det kan ha.",
+                "close": "$~stäng reaktionerna",
+                "pick": "$~reagera med $emoji",
+                "give": "$~$#count[lägg till din $emoji — $count person har|lägg till din $emoji — $count personer har]",
+                "take": "$~$#count[ta tillbaka din $emoji — $count person har den|ta tillbaka din $emoji — $count personer har den]"
+            },
+            "reference": {
+                "mode": {
+                    "on": "$~sluta prata om den här koden",
+                    "off": "$~prata om koden där min markör är"
+                },
+                "prompt": "$~Ditt meddelande handlar om $location.",
+                "line": "$~rad $line",
+                "lines": "$~rader $first–$last",
+                "label": "$~om $location: $code",
+                "invalid": "$~den här koden är borta",
+                "marker": "$~$#count[läs meddelandet om denna kod|läs de $count meddelandena om denna kod]"
             }
         },
         "palette": {
@@ -8827,7 +8901,7 @@
                         ]
                     },
                     "example": {
-                        "phrase": "$~\\¶Fraser visas på scenen, i vilken färg, glöd och rörelse du vill.¶\nFras(\n\t'hej!'\n\t6m\n\tfärg: Färg(60% 90 200°)\n\taura: Aura(Färg(80% 80 200°) 0.3m)\n\tvilande: Sekvens.vingla(8°)\n)\\",
+                        "phrase": "$~\\¶@Phrase visas på scenen, i valfri färg, med glöd och rörelse som du vill.¶\nFras(\n\t'hej!'\n\t6m\n\tfärg: Färg(60% 90 200°)\n\taura: Aura(Färg(80% 80 200°) 0.3m)\n\tvilande: Sekvens.vingla(8°)\n)\\",
                         "music": "$~\\¶Musik är toner på riktiga instrument, i ett tempo, i en tonart. Scenen ritar det den hör.¶\nMusik(\n\tSpår([1 3 5 8 5 3] instrument: Instrument.piano)\n\ttempo: 120beats/min\n)\\",
                         "hello": "$~\\¶Koden kan reagera på inmatning som @Time, och text kan vara flerspråkig och talad.¶\nhejsan: ['hej'/sv 'hola'/es 'こんにちは'/ja 'habari'/sw 'नमस्ते'/hi]\nhej: hejsan.slumpmässig() … ∆ Tid(1000ms) … hejsan.slumpmässig(\n\t\t)\nFras(hej 4m)\nSäga(hej)\\",
                         "keys": "$~\\¶Kod kan reagera på pekare, tangenter, klick och tryck.¶\nnyckel2: Nyckel()\nklick: Knapp()\nansikten: ['🙂' '😮' '😎' '🤩']\nvilken: 1 … ∆ nyckel2 | ∆ klick … (vilken % 4) + 1\nEtapp(\n\t[Fras(ansikten[vilken] 5m plats: Pekare() bubbla: 'hej')]\n\tplats: Plats(0m 0m -12m)\n)\\",
@@ -8966,7 +9040,11 @@
                 },
                 "contrast": "$~jämför med",
                 "dialogue": "$~lektionsdialog",
-                "says": "$~$character säger"
+                "says": "$~$character säger",
+                "tour": {
+                    "skip": "$~hoppa över visningen och fortsätt",
+                    "wait": "$~Ta visningen först, eller hoppa över den, och sedan fortsätter vi."
+                }
             },
             "teach": {
                 "header": "$~Lära",

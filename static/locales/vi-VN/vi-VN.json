@@ -171,6 +171,14 @@
         "column": {
             "word": "$~cột",
             "definition": "$~Một trường có tên trong một @Table."
+        },
+        "editor": {
+            "word": "$~trình soạn thảo",
+            "definition": "$~Ô để bạn viết @code. Những gì bạn gõ vào đó là những gì @wordplay thực hiện."
+        },
+        "stage": {
+            "word": "$~sân khấu",
+            "definition": "$~Không gian nơi @wordplay hiển thị những gì @code của bạn tạo ra."
         }
     },
     "terms": {},
@@ -541,7 +549,8 @@
                 "codepoint": "$~ký tự Unicode $concept",
                 "ui": "$~một liên kết đến phần tử giao diện $concept",
                 "how": "$~một liên kết đến hướng dẫn sử dụng $concept",
-                "character": "$~nhân vật tùy chỉnh $concept"
+                "character": "$~nhân vật tùy chỉnh $concept",
+                "tour": "$~một liên kết đến phần giới thiệu về $concept"
             }
         },
         "Words": {
@@ -1950,7 +1959,7 @@
             "name": "$~kiểu bảng",
             "description": "$~bảng",
             "emotion": "angry",
-            "doc": "$~Tôi đại diện cho một Bảng.",
+            "doc": "$~Tôi đại diện cho một @Table.",
             "conflict": {
                 "ExpectedColumnType": {
                     "name": "$~thiếu kiểu cột",
@@ -7761,7 +7770,7 @@
             "label": "$~xung đột và giúp đỡ",
             "cursor": "$~Đây là *$node*$type[ và nó là một $type|].",
             "cursorDoc": "$~Chúng nói: “$description”",
-            "cursorParent": "$~Chúng nằm bên trong một *$node*$type[ thuộc loại $type|].",
+            "cursorParent": "$~Chúng nằm bên trong một *$node*$type[, cho ra kết quả là một $type|].",
             "learn": "$~Tìm hiểu thêm",
             "evaluating": "$~Ồ thú vị quá, cùng đánh giá nào!",
             "space": "$~Đây chính là không gian! Ai ngờ một thứ vô tri vô giác lại có thể nói lên nhiều điều đến thế?",
@@ -8248,7 +8257,7 @@
                 },
                 "field": {
                     "emailOrUsername": {
-                        "placeholder": "$~email hoặc tên người dùng",
+                        "placeholder": "$~email/tên người dùng",
                         "description": "$~Địa chỉ email hoặc tên người dùng của người mà bạn muốn cấp quyền chỉnh sửa."
                     },
                     "preview": {
@@ -8540,6 +8549,21 @@
                             "$~Không phát âm thanh khi đầu ra va chạm",
                             "$~Phát một âm thanh khi đầu ra va chạm, va càng mạnh thì âm càng lớn"
                         ]
+                    },
+                    "placement": {
+                        "label": "$~vị trí sân khấu",
+                        "labels": [
+                            "$~trên bên trái",
+                            "$~trên bên phải",
+                            "$~dưới bên trái",
+                            "$~dưới bên phải"
+                        ],
+                        "tips": [
+                            "$~đặt sân khấu ở trên bên trái, và các khối khác ở những vị trí tương ứng xung quanh nó",
+                            "$~đặt sân khấu ở trên bên phải, và các khối khác ở những vị trí tương ứng xung quanh nó",
+                            "$~đặt sân khấu ở dưới bên trái, và các khối khác ở những vị trí tương ứng xung quanh nó",
+                            "$~đặt sân khấu ở dưới bên phải, và các khối khác ở những vị trí tương ứng xung quanh nó"
+                        ]
                     }
                 },
                 "options": {
@@ -8725,10 +8749,10 @@
             "label": "$~cộng tác",
             "role": {
                 "owner": "$~người sở hữu",
-                "collaborators": "$~người cộng tác (chỉnh sửa và trò chuyện)",
-                "curators": "$~người phụ trách",
-                "commenters": "$~người bình luận (chỉ trò chuyện)",
-                "viewers": "$~người xem"
+                "collaborate": "$~hợp tác",
+                "comment": "$~bình luận",
+                "view": "$~xem",
+                "curate": "$~phụ trách"
             },
             "field": {
                 "message": {
@@ -8741,15 +8765,12 @@
                     "label": "$~gửi",
                     "tip": "$~gửi tin nhắn cho các cộng tác viên của bạn và"
                 },
-                "start": {
-                    "label": "$~bắt đầu cuộc trò chuyện",
-                    "tip": "$~Bắt đầu cuộc thảo luận với chính mình hoặc với người khác."
-                },
                 "delete": "$~xóa tin nhắn này",
                 "confirmDelete": "$~Xác nhận xóa?",
                 "transfer": {
                     "description": "$~biến người này thành chủ sở hữu của dự án",
-                    "prompt": "$~Biến họ thành chủ sở hữu? Bạn vẫn là người cộng tác và có thể tiếp tục chỉnh sửa, nhưng bạn sẽ không còn có thể xóa dự án này nữa."
+                    "prompt": "$~Cho họ làm chủ sở hữu?",
+                    "consequence": "$~Bạn sẽ vẫn là người hợp tác và có thể tiếp tục chỉnh sửa, nhưng bạn sẽ không còn xóa được dự án này nữa."
                 }
             },
             "moderation": {
@@ -8774,15 +8795,7 @@
                 "deleted": "$~Tin nhắn này đã bị xóa.",
                 "transferGallery": "$~Dự án này nằm trong một phòng trưng bày. Trao nó cho người khác không thêm họ vào phòng trưng bày đó, nên họ có thể sẽ không thấy được nó ở đó."
             },
-            "prompt": {
-                "solo": "$~Trò chuyện với chính mình hoặc thêm...",
-                "owner": "$~Những người cộng tác có thể chỉnh sửa dự án này và thảo luận về nó. Người bình luận có thể trò chuyện nhưng không thể chỉnh sửa dự án này. Người xem có thể xem dự án này nhưng không thể trò chuyện.",
-                "collaborator": "$~Bạn là cộng tác viên. Bạn có thể chỉnh sửa dự án này và thảo luận về nó.",
-                "curator": "$~Bạn là người quản lý thư viện ảnh của dự án này. Bạn có thể chỉnh sửa dự án và trò chuyện về nó. Chỉ chủ sở hữu dự án, cộng tác viên và người bình luận mới có thể xem được cuộc trò chuyện.",
-                "commenter": "$~Bạn là người bình luận. Bạn có thể trò chuyện về dự án này nhưng không thể chỉnh sửa nó."
-            },
             "restrictGalleryCreatorAccess": {
-                "explanation": "$~Dự án của bạn đang được trưng bày trong một thư viện ảnh. Theo mặc định, bất kỳ ai có thể xem thư viện này đều có thể xem dự án này. Bạn có thể giới hạn người xem dự án của mình chỉ cho phép bạn và người quản lý thư viện xem.",
                 "mode": {
                     "label": "$~hạn chế quyền truy cập dự án",
                     "labels": ["$~không hạn chế", "$~hạn chế"],
@@ -8794,14 +8807,20 @@
             },
             "tour": {
                 "launch": "$~Hãy cùng khám phá quá trình hợp tác.",
-                "collaborate": "$~Bạn có thể chia sẻ dự án với người khác và trò chuyện với tất cả những người được chia sẻ dự án ngay tại đây.",
-                "collaborators": "$~Các cộng tác viên có thể *chỉnh sửa* dự án và *thảo luận* về dự án với bạn.",
-                "commenters": "$~Người bình luận có thể *thảo luận* về dự án với bạn, nhưng không được phép *chỉnh sửa* nó.",
-                "viewers": "$~Người xem có thể xem dự án và mã nguồn của nó, nhưng không thể thảo luận hoặc chỉnh sửa.",
-                "restrict": "$~Khi một dự án nằm trong *thư viện ảnh*, theo mặc định *mọi người* có thể xem thư viện đều có thể thấy dự án của bạn. Nút /restrict/ sẽ *ẩn* dự án đó khỏi mọi người ngoại trừ bạn và người quản lý thư viện."
+                "collaborate": "$~Mọi người có thể truy cập dự án này đều được liệt kê ở đây, và bạn có thể *trò chuyện* với những người được phép. Chỉ /chủ sở hữu/, /người hợp tác/, và /người bình luận/ mới xem được cuộc trò chuyện.",
+                "collaborators": "$~Mỗi người có một /quyền hạn/. *Hợp tác* nghĩa là họ có thể chỉnh sửa dự án và trò chuyện về nó. *Bình luận* nghĩa là họ có thể trò chuyện nhưng không chỉnh sửa. *Xem* nghĩa là họ chỉ có thể xem chứ không trò chuyện. *Chủ sở hữu* nghĩa là dự án được trao cho họ. /Người phụ trách/ của một phòng trưng bày luôn có thể truy cập dự án, nên bạn không thể thay đổi quyền của họ.",
+                "restrict": "$~Khi một dự án nằm trong *thư viện ảnh*, theo mặc định *mọi người* có thể xem thư viện đều có thể thấy dự án của bạn. Nút /restrict/ sẽ *ẩn* dự án đó khỏi mọi người ngoại trừ bạn và người quản lý thư viện.",
+                "add": "$~Nhấn dấu *+* ở cuối danh sách để thêm ai đó. Nhập *email* hoặc *tên người dùng* của họ, chọn quyền họ có, rồi họ sẽ vào danh sách."
             },
             "announce": {
-                "transferred": "$~$name hiện là chủ sở hữu của $project"
+                "transferred": "$~$name hiện là chủ sở hữu của $project",
+                "privilege": "$~$name giờ có thể $privilege",
+                "removed": "$~$name không còn truy cập được dự án này nữa",
+                "thread": "$~$#count[Chuỗi trả lời cho tin nhắn của $name, $count phản hồi]",
+                "reacted": "$~$#count[$emoji trên tin nhắn này, $count người]",
+                "unreacted": "$~$#count[Đã thu hồi $emoji, $count người rời đi]",
+                "attached": "$~Đang nói về $location.",
+                "found": "$~$name đã nói $opening"
             },
             "translate": {
                 "label": "$~Dịch tin nhắn sang",
@@ -8810,16 +8829,53 @@
                 "messageError": "$~Chúng tôi không thể dịch tin nhắn này.",
                 "messageErrors": "$~$#count[Không thể dịch $count tin nhắn.]",
                 "direction": "$~$from → $to",
-                "moreLanguages": "$~Tìm ngôn ngữ khác",
-                "fewerLanguages": "$~Ẩn ô tìm ngôn ngữ",
                 "translating": "$~Đang dịch tin nhắn…",
                 "translated": "$~$#count[Đã dịch $count tin nhắn sang $language.]",
                 "writingIn": "$~Tôi đang viết bằng",
                 "downloading": "$~Đang lấy bộ dịch $language cho trình duyệt của bạn…",
                 "onDevice": "$~Trình duyệt của bạn đã dịch những tin nhắn này ngay trên thiết bị của bạn, nên không có tin nhắn nào được gửi cho chúng tôi.",
                 "none": "$~Không dịch",
-                "dismiss": "$~bỏ qua",
-                "nothing": "$~Không có gì ở đây để dịch sang $to. Chúng tôi không bao giờ dịch các thông điệp của riêng bạn."
+                "dismiss": "$~bỏ qua"
+            },
+            "table": {
+                "label": "$~ai có thể truy cập dự án này",
+                "choose": "$~$name có thể làm gì",
+                "adding": "$~họ có thể làm gì",
+                "audience": "$~ai có thể xem cuộc trò chuyện này",
+                "add": "$~thêm ai đó",
+                "cancel": "$~không thêm ai đó nữa"
+            },
+            "prompt": "$~Thêm người hợp tác, người bình luận, và người xem",
+            "thread": {
+                "reply": "$~trả lời",
+                "replies": "$~$#count[$count phản hồi]",
+                "unseen": "$~$#count[$count phản hồi mới]",
+                "header": "$~Chuỗi trả lời",
+                "back": "$~quay lại cuộc trò chuyện",
+                "empty": "$~Chưa có phản hồi nào. Hãy nói gì đó!",
+                "placeholder": "$~Trả lời…"
+            },
+            "reaction": {
+                "add": "$~bày tỏ cảm xúc",
+                "more": "$~thêm…",
+                "label": "$~Chọn một cảm xúc",
+                "full": "$~Tin nhắn này đã có đủ số cảm xúc có thể chứa.",
+                "close": "$~đóng bảng cảm xúc",
+                "pick": "$~bày tỏ cảm xúc bằng $emoji",
+                "give": "$~$#count[thêm $emoji của bạn — $count người đã có]",
+                "take": "$~$#count[thu hồi $emoji của bạn — $count người đang có]"
+            },
+            "reference": {
+                "mode": {
+                    "on": "$~ngừng nói về đoạn mã số này",
+                    "off": "$~nói về đoạn mã số ở nơi con trỏ của tôi đang đứng"
+                },
+                "prompt": "$~Tin nhắn của bạn nói về $location.",
+                "line": "$~dòng $line",
+                "lines": "$~dòng $first–$last",
+                "label": "$~về $location: $code",
+                "invalid": "$~mã số này không còn nữa",
+                "marker": "$~$#count[đọc $count tin nhắn về mã số này]"
             }
         },
         "palette": {
@@ -9080,7 +9136,7 @@
                         ]
                     },
                     "example": {
-                        "phrase": "$~\\¶Cụm từ xuất hiện trên sân khấu, với bất kỳ màu sắc, ánh sáng và chuyển động nào bạn muốn.¶\nCụmtừ(\n\t'xin chào!'\n\t6m\n\tmàusắc: Màusắc(60% 90 200°)\n\thàoquang: Hàoquang(Màusắc(80% 80 200°) 0.3m)\n\tnghỉngơi: Sựliêntiếp.đungđưa(8°)\n)\\",
+                        "phrase": "$~\\¶@Phrase xuất hiện trên sân khấu, với bất kỳ màu sắc, ánh sáng và chuyển động nào bạn thích.¶\nCụmtừ(\n\t'chào bạn!'\n\t6m\n\tmàusắc: Màusắc(60% 90 200°)\n\thàoquang: Hàoquang(Màusắc(80% 80 200°) 0.3m)\n\tnghỉngơi: Sựliêntiếp.đungđưa(8°)\n)\\",
                         "music": "$~\\¶Âm nhạc là những nốt nhạc trên nhạc cụ thật, với một nhịp độ, trong một âm giai. Sân khấu vẽ ra những gì nó nghe được.¶\nÂmNhạc(\n\tBảnNhạc([1 3 5 8 5 3] nhạcCụ: NhạcCụ.đànPiano)\n\tnhịpĐộ: 120beats/min\n)\\",
                         "hello": "$~\\¶Mã số có thể phản ứng với dữ liệu đầu vào như @Time, và văn bản có thể đa ngôn ngữ và được đọc lên.¶\nnhữngLờiChào: ['xin chào'/vi 'hola'/es 'こんにちは'/ja 'habari'/sw 'नमस्ते'/hi]\nxinChào: nhữngLờiChào.ngẫunhiên() … ∆ Thờigian(1000ms) … nhữngLờiChào.ngẫunhiên(\n\t\t)\nCụmtừ(xinChào 4m)\nNói(xinChào)\\",
                         "keys": "$~\\¶Mã số có thể phản ứng với con trỏ, phím, cú nhấp chuột và cú chạm.¶\nchìaKhóa2: Chìakhóa()\nnhấpChuột: Cáinút()\nkhuônMặt2: ['🙂' '😮' '😎' '🤩']\ncáiNào: 1 … ∆ chìaKhóa2 | ∆ nhấpChuột … (cáiNào % 4) + 1\nSânkhấu(\n\t[\n\t\tCụmtừ(\n\t\t\tkhuônMặt2[cáiNào]\n\t\t\t5m\n\t\t\tvịTrí: Contrỏ()\n\t\t\tbongBóng: 'chào'\n\t\t)\n\t]\n\tvịTrí: VịTrí(0m 0m -12m)\n)\\",
@@ -9219,7 +9275,11 @@
                 },
                 "contrast": "$~so sánh với",
                 "dialogue": "$~hội thoại bài học",
-                "says": "$~$character nói"
+                "says": "$~$character nói",
+                "tour": {
+                    "skip": "$~bỏ qua phần giới thiệu và tiếp tục",
+                    "wait": "$~Hãy xem phần giới thiệu trước, hoặc bỏ qua, rồi chúng ta sẽ tiếp tục."
+                }
             },
             "teach": {
                 "header": "$~Dạy bảo",

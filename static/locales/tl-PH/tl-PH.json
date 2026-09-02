@@ -171,6 +171,14 @@
         "column": {
             "word": "$~haligi",
             "definition": "$~Isang may pangalang field sa isang @Table."
+        },
+        "editor": {
+            "word": "$~patnugutan",
+            "definition": "$~Ang kahon kung saan isinusulat mo ang @code. Ang itinatype mo roon ang ipinapatupad ng @wordplay."
+        },
+        "stage": {
+            "word": "$~entablado",
+            "definition": "$~Ang espasyo kung saan ipinapakita ng @wordplay ang ginawa ng iyong @code."
         }
     },
     "terms": {},
@@ -541,7 +549,8 @@
                 "codepoint": "$~ang $concept",
                 "ui": "$~isang link papunta sa elementong interface $concept",
                 "how": "$~isang link sa kung paano gawin ang $concept",
-                "character": "$~ang $concept"
+                "character": "$~ang $concept",
+                "tour": "$~isang link papunta sa isang tour ng $concept"
             }
         },
         "Words": {
@@ -1950,7 +1959,7 @@
             "name": "$~uri ng talahanayan",
             "description": "$~talahanayan",
             "emotion": "angry",
-            "doc": "$~Kinakatawan ko ang isang Talahanayan.",
+            "doc": "$~Kumakatawan ako sa @Table.",
             "conflict": {
                 "ExpectedColumnType": {
                     "name": "$~nawawalang uri ng haligi",
@@ -7763,7 +7772,7 @@
             "label": "$~mga tunggalian at tulong",
             "cursor": "$~Ito ay *$node*$type[ at ito ay isang $type|].",
             "cursorDoc": "$~Sinasabi nila: “$description”",
-            "cursorParent": "$~Nasa loob sila ng isang *$node*$type[ na uri ng $type|].",
+            "cursorParent": "$~Nasa loob sila ng isang *$node*$type[, na nagbibigay ng $type|].",
             "learn": "$~/Matuto nang higit pa/",
             "evaluating": "$~Ang saya, tara, suriin natin!",
             "space": "$~Ito ang espasyo! Sino ang mag-aakala na walang makakapagsabi ng ganito karami?",
@@ -8246,7 +8255,7 @@
                 },
                 "field": {
                     "emailOrUsername": {
-                        "placeholder": "$~email o username",
+                        "placeholder": "$~email/username",
                         "description": "$~email o username ng taong gusto mong bigyan ng access sa pag-edit"
                     },
                     "preview": {
@@ -8541,6 +8550,21 @@
                             "$~Huwag maglabas ng tunog kapag nagbanggaan ang output",
                             "$~Magpatugtog ng maikling tunog kapag nagbanggaan ang output, mas malakas kung mas malakas ang tama"
                         ]
+                    },
+                    "placement": {
+                        "label": "$~paglagay sa entablado",
+                        "labels": [
+                            "$~itaas na kaliwa",
+                            "$~itaas na kanan",
+                            "$~ibaba na kaliwa",
+                            "$~ibaba na kanan"
+                        ],
+                        "tips": [
+                            "$~ilagay ang entablado sa itaas na kaliwa, at ang ibang tile sa katugmang lugar sa palibot nito",
+                            "$~ilagay ang entablado sa itaas na kanan, at ang ibang tile sa katugmang lugar sa palibot nito",
+                            "$~ilagay ang entablado sa ibaba na kaliwa, at ang ibang tile sa katugmang lugar sa palibot nito",
+                            "$~ilagay ang entablado sa ibaba na kanan, at ang ibang tile sa katugmang lugar sa palibot nito"
+                        ]
                     }
                 },
                 "options": {
@@ -8726,10 +8750,10 @@
             "label": "$~makipagtulungan",
             "role": {
                 "owner": "$~may-ari",
-                "collaborators": "$~mga kolaborator (mag-edit at makipag-chat)",
-                "curators": "$~mga curator",
-                "commenters": "$~mga nagkokomento (chat lamang)",
-                "viewers": "$~mga manonood"
+                "collaborate": "$~tumulong",
+                "comment": "$~magkomento",
+                "view": "$~tingnan",
+                "curate": "$~pumili"
             },
             "field": {
                 "message": {
@@ -8742,15 +8766,12 @@
                     "label": "$~ipadala",
                     "tip": "$~magpadala ng mensahe sa iyong mga katuwang at"
                 },
-                "start": {
-                    "label": "$~magsimula ng chat",
-                    "tip": "$~magsimula ng talakayan sa iyong sarili o sa iba."
-                },
                 "delete": "$~burahin ang mensaheng ito",
                 "confirmDelete": "$~kumpirmahin ang pagbura?",
                 "transfer": {
                     "description": "$~gawing may-ari ng proyekto ang taong ito",
-                    "prompt": "$~Gawin ba siyang may-ari? Mananatili kang kolaborador at maaari ka pa ring mag-edit, pero hindi mo na mabubura ang proyektong ito."
+                    "prompt": "$~Gawin silang may-ari?",
+                    "consequence": "$~Mananatili kang katuwang at maaari kang magpatuloy sa pag-edit, pero hindi mo na maaaring burahin ang proyektong ito."
                 }
             },
             "moderation": {
@@ -8775,15 +8796,7 @@
                 "deleted": "$~Binura na ang mensaheng ito.",
                 "transferGallery": "$~Nasa isang gallery ang proyektong ito. Kapag ibinigay mo ito sa iba, hindi sila awtomatikong naidaragdag sa gallery na iyon, kaya maaaring hindi nila ito makita doon."
             },
-            "prompt": {
-                "solo": "$~Makipag-chat sa sarili mo o magdagdag...",
-                "owner": "$~Maaaring i-edit ng mga kolaborator ang proyektong ito at makipag-usap tungkol dito. Maaaring makipag-chat ang mga nagkokomento ngunit hindi maaaring i-edit ang proyektong ito. Maaaring tingnan ng mga tumitingin ang proyektong ito ngunit hindi maaaring makipag-chat.",
-                "collaborator": "$~Isa kang kolaborator. Maaari mong i-edit ang proyektong ito at pag-usapan ito.",
-                "curator": "$~Ikaw ang tagapangasiwa ng gallery ng proyektong ito. Maaari mong i-edit ang proyektong ito at makipag-usap tungkol dito. Tanging ang may-ari, mga kolaborator, at mga nagkokomento ng proyekto ang makakakita ng chat.",
-                "commenter": "$~Isa kang tagakomento. Maaari kang makipag-usap tungkol sa proyektong ito ngunit hindi mo ito maaaring i-edit."
-            },
             "restrictGalleryCreatorAccess": {
-                "explanation": "$~Ang iyong proyekto ay nasa isang gallery. Bilang default, sinumang makakakita sa gallery na ito ay makakakita rin ng proyektong ito. Maaari mong limitahan kung sino ang makakakita ng iyong proyekto sa iyo at sa mga curator ng gallery lamang.",
                 "mode": {
                     "label": "$~paghigpitan ang pag-access sa proyekto",
                     "labels": ["$~huwag paghigpitan", "$~paghigpitan"],
@@ -8795,11 +8808,25 @@
             },
             "tour": {
                 "launch": "$~maglibot sa pakikipagtulungan",
-                "collaborate": "$~Maaaring /ibahagi/ ang mga proyekto sa ibang tao, at maaari kang *makipag-chat* sa lahat ng taong pinagbabahagian ng proyekto rito mismo.",
-                "collaborators": "$~Maaaring *i-edit* ng /Mga Kolaborator/ ang proyekto at *makipag-usap* tungkol dito sa iyo.",
-                "commenters": "$~Maaaring *talakayin* ng mga /tagapagkomento/ ang proyekto sa iyo, ngunit hindi nila ito maaaring *i-edit*.",
-                "viewers": "$~Maaaring *tingnan* ng mga /tumitingin/ ang proyekto at ang *code* nito, ngunit hindi nila ito maaaring *talakayin* o *i-edit*.",
-                "restrict": "$~Kapag ang isang proyekto ay nasa isang *gallery*, bilang default, *lahat* ng makakakita sa gallery ay makakakita ng iyong proyekto. *Itinatago* ito ng /restrict/ toggle mula sa lahat maliban sa iyo at sa mga curator ng gallery."
+                "collaborate": "$~Nakalista rito ang lahat ng makaka-abot sa proyektong ito, at maaari kang *mag-chat* sa mga taong pinapayagan. Tanging ang /may-ari/, ang mga /katuwang/, at ang mga /nagkokomento/ ang makakakita ng chat.",
+                "collaborators": "$~Bawat tao ay may isang /karapatan/. Ang *Tumulong* ay nangangahulugang maaari nilang i-edit ang proyekto at mag-chat tungkol dito. Ang *Magkomento* ay nangangahulugang maaari silang mag-chat pero hindi maka-edit. Ang *Tingnan* ay nangangahulugang maaari lang silang tumingin pero hindi maka-chat. Ang *May-ari* ay nagbibigay sa kanila ng proyekto. Ang mga /kurador/ ng isang galeriya ay laging may abot dito, kaya hindi mo maaaring baguhin ang kanilang karapatan.",
+                "restrict": "$~Kapag ang isang proyekto ay nasa isang *gallery*, bilang default, *lahat* ng makakakita sa gallery ay makakakita ng iyong proyekto. *Itinatago* ito ng /restrict/ toggle mula sa lahat maliban sa iyo at sa mga curator ng gallery.",
+                "add": "$~Pindutin ang *+* sa dulo ng listahan para magdagdag ng tao. I-type ang kanilang *email* o *username*, piliin kung ano ang kaya nilang gawin, at sasali sila sa listahan."
+            },
+            "translate": {
+                "label": "$~Isalin ang mga mensahe sa",
+                "off": "$~Ihinto ang pagsasalin",
+                "error": "$~Hindi namin naisalin ang mga mensaheng ito sa $to. Subukan ulit mamaya.",
+                "messageError": "$~Hindi namin naisalin ang mensaheng ito.",
+                "direction": "$from → $to",
+                "messageErrors": "$~$#count[Hindi namin naisalin ang $count mensahe.|Hindi namin naisalin ang $count na mensahe.]",
+                "translating": "$~Isinasalin ang mga mensahe…",
+                "translated": "$~$#count[Naisalin ang $count mensahe sa $language.|Naisalin ang $count na mensahe sa $language.]",
+                "writingIn": "$~Sumusulat ako sa",
+                "downloading": "$~Kumukuha ng tagasalin ng $language para sa iyong browser…",
+                "onDevice": "$~Isinalin ito ng iyong browser mismo sa iyong device, kaya walang mensaheng ipinadala sa amin.",
+                "none": "$~Huwag isalin",
+                "dismiss": "$~itaboy"
             },
             "translate": {
                 "label": "$~Isalin ang mga mensahe sa",
@@ -8820,7 +8847,54 @@
                 "nothing": "$~Walang dito na maisasalin sa $to. Hindi namin isinasalin ang mga sariling mensahe mo."
             },
             "announce": {
-                "transferred": "$~Si $name na ngayon ang may-ari ng $project"
+                "transferred": "$~Si $name na ngayon ang may-ari ng $project",
+                "privilege": "$~Ngayon ay maaaring $name ni $privilege",
+                "removed": "$~Hindi na maaabot ni $name ang proyektong ito",
+                "thread": "$~$#count[Thread sa mensahe ni $name, $count sagot|Thread sa mensahe ni $name, $count na sagot]",
+                "reacted": "$~$#count[$emoji sa mensaheng ito, $count tao|$emoji sa mensaheng ito, $count na tao]",
+                "unreacted": "$~$#count[Binawi ang $emoji, $count taong umalis|Binawi ang $emoji, $count na taong umalis]",
+                "attached": "$~Pinag-uusapan ang $location.",
+                "found": "$~Sinabi ni $name ang $opening"
+            },
+            "table": {
+                "label": "$~sino ang maaaring maabot ang proyektong ito",
+                "choose": "$~ano ang maaaring gawin ni $name",
+                "adding": "$~ano ang maaari nilang gawin",
+                "audience": "$~sino ang makakakita ng chat na ito",
+                "add": "$~magdagdag ng tao",
+                "cancel": "$~huwag na magdagdag ng tao"
+            },
+            "prompt": "$~Magdagdag ng mga katuwang, tagakomento, at tagatingin",
+            "thread": {
+                "reply": "$~sagot",
+                "replies": "$~$#count[$count sagot|$count na sagot]",
+                "unseen": "$~$#count[$count bagong sagot|$count na bagong sagot]",
+                "header": "$~Thread",
+                "back": "$~bumalik sa pag-uusap",
+                "empty": "$~Walang sagot pa. Sabihin ang iyong nasa isip!",
+                "placeholder": "$~Sumagot…"
+            },
+            "reaction": {
+                "add": "$~mag-reaksyon",
+                "more": "$~pa…",
+                "label": "$~Pumili ng reaksyon",
+                "full": "$~Puno na ang mensaheng ito ng reaksyon. Wala nang puwang.",
+                "close": "$~isara ang mga reaksyon",
+                "pick": "$~mag-reaksyon gamit ang $emoji",
+                "give": "$~$#count[idagdag ang iyong $emoji — $count tao ang mayroon nito|idagdag ang iyong $emoji — $count na tao ang mayroon nito]",
+                "take": "$~$#count[bawiin ang iyong $emoji — $count tao ang may nito|bawiin ang iyong $emoji — $count na tao ang may nito]"
+            },
+            "reference": {
+                "mode": {
+                    "on": "$~itigil ang pag-usap tungkol sa kodigong ito",
+                    "off": "$~pag-usapan ang kodigo kung saan naroon ang aking cursor"
+                },
+                "prompt": "$~Tungkol sa $location ang mensahe mo.",
+                "line": "$~linya $line",
+                "lines": "$~mga linya $first–$last",
+                "label": "$~tungkol sa $location: $code",
+                "invalid": "$~wala na ang kodigong ito",
+                "marker": "$~$#count[basahin ang mensahe tungkol sa kodigong ito|basahin ang $count mensahe tungkol sa kodigong ito]"
             }
         },
         "palette": {
@@ -9180,7 +9254,7 @@
                         ]
                     },
                     "example": {
-                        "phrase": "$~\\¶Lumalabas ang mga Phrase sa entablado, sa anumang kulay, ningning, at galaw na gusto mo.¶\nParirala(\n\t'kumusta!'\n\t6m\n\tkulay: Kulay(60% 90 200°)\n\taura: Aura(Kulay(80% 80 200°) 0.3m)\n\tnagpapahinga: Pagkakasunodsunod.ugoy(8°)\n)\\",
+                        "phrase": "$~\\¶Lumalabas ang @Phrase sa entablado, sa anumang kulay, ningning, at galaw na gusto mo.¶\nParirala(\n\t'kumusta!'\n\t6m\n\tkulay: Kulay(60% 90 200°)\n\taura: Aura(Kulay(80% 80 200°) 0.3m)\n\tnagpapahinga: Pagkakasunodsunod.ugoy(8°)\n)\\",
                         "music": "$~\\¶Ang musika ay mga nota sa tunay na instrumento, sa isang tempo, sa isang key. Iginuguhit ng entablado ang naririnig nito.¶\nMusika(\n\tTrack([1 3 5 8 5 3] instrumento: Instrumento.piyano)\n\ttempo: 120beats/min\n)\\",
                         "hello": "$~\\¶Ang kodigo ay maaaring tumugon sa input tulad ng @Time, at ang teksto ay maaaring maraming wika at mabigkas.¶\nmgaKumusta: ['kumusta'/tl 'hola'/es 'こんにちは'/ja 'habari'/sw 'नमस्ते'/hi]\nkumusta: mgaKumusta.random() … ∆ Oras(1000ms) … mgaKumusta.random(\n\t\t)\nParirala(kumusta 4m)\nSabihin(kumusta)\\",
                         "keys": "$~\\¶Ang kodigo ay maaaring tumugon sa pointer, susi, klik, at tap.¶\nsusi2: Susi()\nklik: Butones()\nmukha2: ['🙂' '😮' '😎' '🤩']\nalin: 1 … ∆ susi2 | ∆ klik … (alin % 4) + 1\nEntablado(\n\t[Parirala(mukha2[alin] 5m lugar: Panturo() bula: 'hi')]\n\tlugar: Lugar(0m 0m -12m)\n)\\",
@@ -9319,7 +9393,11 @@
                 },
                 "contrast": "$~ihambing sa",
                 "dialogue": "$~diyalogo ng aralin",
-                "says": "$~sabi ni $character"
+                "says": "$~sabi ni $character",
+                "tour": {
+                    "skip": "$~laktawan ang tour at magpatuloy",
+                    "wait": "$~Gawin muna ang tour, o laktawan ito, at pagkatapos ay magpapatuloy tayo."
+                }
             },
             "teach": {
                 "header": "$~Magturo",

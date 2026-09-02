@@ -11,6 +11,8 @@ import { AnimationFactorSetting } from '@db/settings/AnimationFactorSetting';
 import { AnnotationsSetting } from '@db/settings/AnnotationsSetting';
 import type { ArrangementType } from '@db/settings/Arrangement';
 import { ArrangementSetting } from '@db/settings/ArrangementSetting';
+import type { StagePlacementType } from '@db/settings/StagePlacement';
+import { StagePlacementSetting } from '@db/settings/StagePlacementSetting';
 import { AdaptOutputSetting } from '@db/settings/AdaptOutputSetting';
 import {
     BlockDensitySetting,
@@ -33,6 +35,12 @@ import {
     type ProjectFolder,
     type ProjectFolders,
 } from '@db/settings/ProjectFoldersSetting';
+import { ToursSetting, type ToursTaken } from '@db/settings/ToursSetting';
+import {
+    ChatThreadsSetting,
+    type ChatThreadsSeen,
+} from '@db/settings/ChatThreadsSetting';
+import type { TourID } from '@components/project/tours';
 import {
     ProjectSortSetting,
     type ProjectSort,
@@ -144,8 +152,38 @@ export type SettingsSchemaV6 = Omit<SettingsSchemaV5, 'v'> & {
     space?: boolean;
 };
 
-export type SettingsSchema = SettingsSchemaV6;
-const SettingsSchemaLatestVersion = 6;
+/**
+ * v7 adds the interface tours the creator has taken. The tutorial holds a
+ * learner at the step that offers a tour until it's in here, so a creator who
+ * toured the editor on one device shouldn't be gated again on another.
+ *
+ * Optional for the same reason the v6 fields are: a v6 document genuinely lacks
+ * it, and filling in a default during the upgrade would let the first sync
+ * after this ships erase tours the creator had already taken on that device.
+ */
+export type SettingsSchemaV7 = Omit<SettingsSchemaV6, 'v'> & {
+    v: 7;
+    /** The interface tours this creator has taken. */
+    tours?: ToursTaken;
+};
+
+/**
+ * v8 adds how much of each chat thread the creator has already read, so the
+ * "new replies" marker means the same thing on every device they use.
+ *
+ * Optional for the same reason the v6 and v7 fields are: a v7 document
+ * genuinely lacks it, and filling in a default during the upgrade would let the
+ * first sync after this ships mark every thread unread on a device where they
+ * had read them.
+ */
+export type SettingsSchemaV8 = Omit<SettingsSchemaV7, 'v'> & {
+    v: 8;
+    /** How many replies each thread had when this creator last read it. */
+    chatThreads?: ChatThreadsSeen;
+};
+
+export type SettingsSchema = SettingsSchemaV8;
+const SettingsSchemaLatestVersion = 8;
 
 type SettingsSchemaUnknown =
     | SettingsSchemaV1
@@ -153,6 +191,8 @@ type SettingsSchemaUnknown =
     | SettingsSchemaV3
     | SettingsSchemaV4
     | SettingsSchemaV5
+    | SettingsSchemaV6
+    | SettingsSchemaV7
     | SettingsSchema;
 
 function upgradeSettings(settings: SettingsSchemaUnknown): SettingsSchema {
@@ -190,6 +230,14 @@ function upgradeSettings(settings: SettingsSchemaUnknown): SettingsSchema {
             // the creator's next settings write, so this upgrade can't stomp a
             // local choice with a default.
             return upgradeSettings({ ...settings, v: 6 });
+        case 6:
+            // v6→v7: nothing to fill in, for the same reason as v5→v6 — an
+            // absent `tours` means "unknown", not "none taken".
+            return upgradeSettings({ ...settings, v: 7 });
+        case 7:
+            // v7→v8: nothing to fill in either — an absent `chatThreads` means
+            // "unknown", not "has read nothing".
+            return upgradeSettings({ ...settings, v: 8 });
         case SettingsSchemaLatestVersion:
             return settings;
         default:
@@ -207,6 +255,7 @@ export default class SettingsDatabase {
         carets: CaretsSetting,
         folds: FoldsSetting,
         arrangement: ArrangementSetting,
+        stagePlacement: StagePlacementSetting,
         animationFactor: AnimationFactorSetting,
         locales: LocalesSetting,
         writingLayout: WritingLayoutSetting,
@@ -240,6 +289,8 @@ export default class SettingsDatabase {
         captionSize: CaptionSizeSetting,
         projectFolders: ProjectFoldersSetting,
         projectSort: ProjectSortSetting,
+        tours: ToursSetting,
+        chatThreads: ChatThreadsSetting,
     };
 
     constructor(database: Database, locales: SupportedLocale[]) {
@@ -328,6 +379,10 @@ export default class SettingsDatabase {
                 this.settings.wrap.set(this.database, data.wrap);
             if (data.space !== undefined)
                 this.settings.space.set(this.database, data.space);
+            if (data.tours !== undefined)
+                this.settings.tours.set(this.database, data.tours);
+            if (data.chatThreads !== undefined)
+                this.settings.chatThreads.set(this.database, data.chatThreads);
         }
     }
 
@@ -355,6 +410,38 @@ export default class SettingsDatabase {
 
     setLayout(layouts: Record<string, SerializedLayout>) {
         this.settings.layouts.set(this.database, layouts);
+    }
+
+    /** The interface tours this creator has taken. */
+    getToursTaken(): ToursTaken {
+        return this.settings.tours.get();
+    }
+
+    /** Remember that a tour was taken, from wherever it was launched — the ⓘ
+     *  button on a tile counts, so a creator who already toured the editor is
+     *  never held at the tutorial step that offers it. */
+    markTourTaken(id: TourID) {
+        const taken = this.getToursTaken();
+        if (taken.includes(id)) return;
+        this.settings.tours.set(this.database, [...taken, id]);
+    }
+
+    /** How many replies a thread had when this creator last read it, or zero
+     *  for one they have never opened. */
+    getThreadRepliesSeen(chat: string, root: string): number {
+        return this.settings.chatThreads.get()[chat]?.[root] ?? 0;
+    }
+
+    /** Remember that this creator has now seen a thread's replies. Only ever
+     *  moves forward: reading an older copy of a conversation shouldn't
+     *  re-announce replies they have already read. */
+    markThreadRead(chat: string, root: string, replies: number) {
+        const seen = this.settings.chatThreads.get();
+        if ((seen[chat]?.[root] ?? 0) >= replies) return;
+        this.settings.chatThreads.set(this.database, {
+            ...seen,
+            [chat]: { ...(seen[chat] ?? {}), [root]: replies },
+        });
     }
 
     /** The creator's project folders, by ID. */
@@ -463,6 +550,14 @@ export default class SettingsDatabase {
 
     setArrangement(arrangement: ArrangementType) {
         this.settings.arrangement.set(this.database, arrangement);
+    }
+
+    setStagePlacement(placement: StagePlacementType) {
+        this.settings.stagePlacement.set(this.database, placement);
+    }
+
+    getStagePlacement() {
+        return this.settings.stagePlacement.get();
     }
 
     setAnimationFactor(factor: number | null) {
@@ -726,6 +821,8 @@ export default class SettingsDatabase {
             newHowToNotifications: this.settings.howToNotifications.get(),
             projectFolders: this.settings.projectFolders.get(),
             projectSort: this.settings.projectSort.get(),
+            tours: this.settings.tours.get(),
+            chatThreads: this.settings.chatThreads.get(),
             face: this.settings.face.get(),
             lines: this.settings.lines.get(),
             wrap: this.settings.wrap.get(),

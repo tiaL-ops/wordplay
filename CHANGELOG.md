@@ -4,6 +4,45 @@ We'll note all notable changes in this file, including bug fixes, enhancements, 
 Dates are in `YYYY-MM-DD` format and versions are in [semantic versioning](http://semver.org/) format.
 These notes are publicly posted in [production](https://wordplay.dev/updates), so we write them to an audience of teachers and youth.
 
+## 0.34.0 - 2026-09-01
+
+### Added
+
+- 💬 You can now reply to one message instead of to the whole conversation. Replies gather into a thread on the message they answer, and the count turns gold when some of them are new to you. (#821)
+- 👍 You can now react to a message with an emoji. Eight common ones are a single press away, and you can search for any other emoji you like. (#821)
+- 📎 You can now say which code you're talking about. Put your cursor in the code, press the 📎 beside the message box, and your message carries that line. You can send just the link, with no words at all. (#820)
+- 👥 Code somebody has talked about gets a 👥 in the margin beside it. Press it to read what was said. The link follows your program too: add lines above it and it still points at the same code, and if that code goes away the link says so instead of pointing somewhere wrong. (#820)
+- 📐 You can now pick which corner of the screen the stage sits in: top left, top right, bottom left, or bottom right. The guide, palette, and collaborate tiles move to match, and your code stays in the middle. (#925)
+
+### Changed
+
+- 🤝 The collaborate tile's list of people now fills the width of the tile, and the box for adding someone waits behind a **+** until you ask for it, so the list takes less room. The list no longer slides when you start writing a message; it just changes.
+- ✍️ The message box no longer offers the three buttons for marking up an example (⭐, 🪲, 👀). Those are for writing documentation, not for talking to your collaborators.
+- 🧱 The stage now sits in the same corner whatever the shape of your window. Before, a tall window put it on one side and a wide window on the other. (#925)
+- 🧹 The layout button at the bottom of a project now shows one icon instead of two, to make room. When your layout is automatic, its tip still says which layout it picked.
+
+### Fixed
+
+- 🐛 A button you'd moved to with the keyboard was dimmed along with the rest of the tile's header, which made the focus outline hard to see. A header you're working in is no longer dimmed.
+- 🐛 The settings no longer slide sideways on a narrow window. Rows of buttons now wrap onto a second line instead of running off the edge.
+- 🎨 One of the layout buttons in the settings showed a colored icon while the rest were black and white. They all match now.
+
+## 0.33.1 - 2026-08-30
+
+### Added
+
+- 🧭 The [tutorial](https://wordplay.dev/learn) now shows you the interface instead of just talking about it: when a lesson is about the editor, stage, palette, guide, or timeline, it offers a tour that points at each control right where it sits, and waits for you to take it. You can always skip a tour, and one you've taken already won't ask again. (#984)
+
+### Changed
+
+- 📝 We rewrote the lessons that talk about parts of the screen. They now say what the editor and the stage _are_ before using those words, and they explain an exception in plainer language. (#984)
+- 📖 We added _editor_ and _stage_ to the glossary, so a mention of either word anywhere in Wordplay can tell you what it means. (#984)
+
+### Fixed
+
+- 🐛 The tutorial pointed at two buttons that don't exist anymore — one for seeing a project's code, and one in the editor's own tour. Both now point at controls that are really there. (#984)
+- 🚦 When your cursor is inside a placeholder, we no longer say it's "of type any". That never told you anything. (#984)
+
 ## 0.33.0 - 2026-08-29
 
 ### Added
@@ -21,6 +60,11 @@ These notes are publicly posted in [production](https://wordplay.dev/updates), s
 - 🔒 A reported message is now really hidden while someone looks at it. Before, it was only hidden on screen, and the words were still there for anyone who looked closely. (#938)
 - 🚩 Reporting a message hides it once. If it's kept and someone reports it again, it stays visible the second time, so reporting can't be used to keep someone quiet. (#938)
 - 🤝 Reported messages now wait on the moderation page along with everything else to review, instead of on their own page. Your notifications will take you there. (#938)
+- 🤝 The collaborate tile now lists everyone who can reach your project in one table, with a menu beside each person for what they can do: collaborate, comment, view, or take over as owner. Each person has just one, so picking a new one moves them instead of adding them to a second list.
+- 💬 A chat now starts by talking. The message box is there as soon as you open the tile, and sending your first message makes the chat, instead of making you press "start a chat" first.
+- ✍️ While you write a message, the list of people shrinks to a row of everyone who can read what you say, so the conversation gets the whole tile.
+- 🌐 The "translate messages into" and "I'm writing in" menus now sit together on one line above the message box, since they are two halves of the same question. We took away the search beside each one, because the menus already list every language Wordplay speaks.
+- 🤝 Every place Wordplay lists people — a gallery's curators, a class's students, a character's collaborators — now uses that same table, so adding and removing someone works the same way everywhere. When there's room it puts two or more people on a row instead of one, which makes those lists much shorter.
 
 ### Fixed
 
@@ -31,6 +75,9 @@ These notes are publicly posted in [production](https://wordplay.dev/updates), s
 - 🐛 The report flag on a chat message no longer opens the report box for every message at once. (#938)
 - 🐛 Reporting the same thing twice no longer makes two reports. (#938)
 - 🔒 Only the person who owns a project can delete its chat now. Before, anyone in the chat could delete the whole conversation. (#938)
+- 🐛 The same person could end up in two of your project's lists at once and show up twice in the collaborate tile. Now everyone has one privilege, and an old project fixes itself the first time you change anything.
+- 🐛 When you typed a name we couldn't use, the message saying why could get cut off, or hidden behind a button. It now floats above everything, right under the box you typed in.
+- 🗣️ Screen readers now hear why a name was rejected in the boxes that hold several lines of writing. The message was on screen, but nothing tied it to the box, so it was never read out.
 
 ## 0.32.1 - 2026-08-28
 

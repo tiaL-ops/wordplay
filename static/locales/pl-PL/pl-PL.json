@@ -171,6 +171,14 @@
         "column": {
             "word": "$~kolumna",
             "definition": "$~Nazwane pole w @Table."
+        },
+        "editor": {
+            "word": "$~edytor",
+            "definition": "$~Miejsce, gdzie piszesz @code. To, co tam wpiszesz, wykonuje @wordplay."
+        },
+        "stage": {
+            "word": "$~scena",
+            "definition": "$~Przestrzeń, w której @wordplay pokazuje, co stworzył twój @code."
         }
     },
     "terms": {},
@@ -541,7 +549,8 @@
                 "codepoint": "$~$concept znaku Unicode",
                 "ui": "$~link do elementu interfejsu $concept",
                 "how": "$~link do instrukcji $concept",
-                "character": "$~niestandardowy znak $concept"
+                "character": "$~niestandardowy znak $concept",
+                "tour": "$~link do wycieczki po $concept"
             }
         },
         "Words": {
@@ -1950,7 +1959,7 @@
             "name": "$~typ tabeli",
             "description": "$~tabela",
             "emotion": "angry",
-            "doc": "$~Reprezentuję Tabelę.",
+            "doc": "$~Reprezentuję @Table.",
             "conflict": {
                 "ExpectedColumnType": {
                     "name": "$~brakujący typ kolumny",
@@ -7533,7 +7542,7 @@
             "label": "$~konflikty i pomoc",
             "cursor": "$~To jest *$node*$type[ i jest to $type|].",
             "cursorDoc": "$~Mówią: „$description”",
-            "cursorParent": "$~Znajdują się wewnątrz *$node*$type[ typu $type|].",
+            "cursorParent": "$~Są wewnątrz *$node*$type[, co daje w wyniku $type|].",
             "learn": "$~/Dowiedz się więcej/",
             "evaluating": "$~O, fajnie, oceńmy!",
             "space": "$~To jest kosmos! Kto by pomyślał, że nic nie może powiedzieć tak wiele?",
@@ -8016,7 +8025,7 @@
                 },
                 "field": {
                     "emailOrUsername": {
-                        "placeholder": "$~e-mail lub nazwa użytkownika",
+                        "placeholder": "$~e-mail/nazwa użytkownika",
                         "description": "$~adres e-mail lub nazwa użytkownika osoby, której chcesz przyznać dostęp do edycji"
                     },
                     "preview": {
@@ -8315,6 +8324,21 @@
                             "$~Nie wydawaj dźwięku, gdy wynik się zderza",
                             "$~Odtwarzaj krótki dźwięk, gdy wynik się zderza, tym głośniejszy, im mocniejsze jest uderzenie"
                         ]
+                    },
+                    "placement": {
+                        "label": "$~umiejscowienie sceny",
+                        "labels": [
+                            "$~lewy górny",
+                            "$~prawy górny",
+                            "$~lewy dolny",
+                            "$~prawy dolny"
+                        ],
+                        "tips": [
+                            "$~umieść scenę w lewym górnym rogu, a pozostałe kafelki w odpowiadających miejscach wokół niej",
+                            "$~umieść scenę w prawym górnym rogu, a pozostałe kafelki w odpowiadających miejscach wokół niej",
+                            "$~umieść scenę w lewym dolnym rogu, a pozostałe kafelki w odpowiadających miejscach wokół niej",
+                            "$~umieść scenę w prawym dolnym rogu, a pozostałe kafelki w odpowiadających miejscach wokół niej"
+                        ]
                     }
                 },
                 "options": {
@@ -8500,10 +8524,10 @@
             "label": "$~współpracować",
             "role": {
                 "owner": "$~właściciel",
-                "collaborators": "$~współpracownicy (edycja i czat)",
-                "curators": "$~kuratorzy",
-                "commenters": "$~komentujący (tylko czat)",
-                "viewers": "$~widzów"
+                "collaborate": "$~współpracować",
+                "comment": "$~komentować",
+                "view": "$~przeglądać",
+                "curate": "$~kurować"
             },
             "field": {
                 "message": {
@@ -8516,15 +8540,12 @@
                     "label": "$~wyślij",
                     "tip": "$~wyślij wiadomość do swoich współpracowników i"
                 },
-                "start": {
-                    "label": "$~rozpocznij czat",
-                    "tip": "$~rozpocznij rozmowę z samym sobą lub z innymi."
-                },
                 "delete": "$~usuń tę wiadomość",
                 "confirmDelete": "$~potwierdzić usunięcie?",
                 "transfer": {
                     "description": "$~uczyń tę osobę właścicielem projektu",
-                    "prompt": "$~Uczynić ją właścicielem? Pozostaniesz współpracownikiem i będziesz mógł nadal edytować, ale nie będziesz już mógł usunąć tego projektu."
+                    "prompt": "$~Uczynić tę osobę właścicielem?",
+                    "consequence": "$~Zostaniesz współpracownikiem i będziesz mógł dalej edytować, ale nie będziesz już mógł usunąć tego projektu."
                 }
             },
             "error": {
@@ -8533,13 +8554,6 @@
                 "empty": "$~Brak wiadomości.",
                 "deleted": "$~Ta wiadomość została usunięta.",
                 "transferGallery": "$~Ten projekt znajduje się w galerii. Przekazanie go komuś innemu nie dodaje tej osoby do tej galerii, więc może ona nie mieć tam do niego dostępu."
-            },
-            "prompt": {
-                "solo": "$~Rozmawiaj ze sobą lub dodaj...",
-                "owner": "$~Współpracownicy mogą edytować ten projekt i rozmawiać o nim. Komentujący mogą rozmawiać, ale nie mogą edytować tego projektu. Widzowie mogą oglądać ten projekt, ale nie mogą rozmawiać.",
-                "collaborator": "$~Jesteś współpracownikiem. Możesz edytować ten projekt i o nim rozmawiać.",
-                "curator": "$~Jesteś kuratorem galerii tego projektu. Możesz edytować ten projekt i rozmawiać o nim. Tylko właściciel projektu, współpracownicy i komentujący mogą widzieć czat.",
-                "commenter": "$~Jesteś komentatorem. Możesz rozmawiać o tym projekcie, ale nie możesz go edytować."
             },
             "moderation": {
                 "header": "$~Zgłoś tę wiadomość",
@@ -8557,7 +8571,6 @@
                 "inGallery": "$~Ten czat znajduje się w galerii. Podlega moderacji przez kuratorów galerii. Możesz zgłaszać wiadomości naruszające nasze <standardy społeczności@://prawa> do moderacji."
             },
             "restrictGalleryCreatorAccess": {
-                "explanation": "$~Twój projekt znajduje się w galerii. Domyślnie każdy, kto może zobaczyć tę galerię, może zobaczyć ten projekt. Możesz ograniczyć dostęp do swojego projektu tylko do siebie i kuratorów galerii.",
                 "mode": {
                     "label": "$~ograniczyć dostęp do projektu",
                     "labels": ["$~nie ograniczaj", "$~ograniczać"],
@@ -8569,11 +8582,25 @@
             },
             "tour": {
                 "launch": "$~wybierz się na wycieczkę po współpracy",
-                "collaborate": "$~Projekty można udostępniać innym osobom, a także możesz *czatować* ze wszystkimi osobami, z którymi współdzielisz projekt, właśnie tutaj.",
-                "collaborators": "$~/Współpracownicy/ mogą *edytować* projekt i *rozmawiać* na jego temat z Tobą.",
-                "commenters": "$~/Komentujący/ mogą *dyskutować* z Tobą o projekcie, ale nie mogą go *edytować*.",
-                "viewers": "$~/Widzowie/ mogą *przeglądać* projekt i jego *kod*, ale nie mogą go *dyskutować* ani *edytować*.",
-                "restrict": "$~Gdy projekt znajduje się w *galerii*, domyślnie *każdy*, kto może zobaczyć galerię, może zobaczyć Twój projekt. Przełącznik /restrict/ *ukrywa* go przed wszystkimi oprócz Ciebie i kuratorów galerii."
+                "collaborate": "$~Tutaj widać wszystkich, którzy mają dostęp do tego projektu. Możesz *rozmawiać* z osobami, które mają na to zgodę. Czat widzi tylko /właściciel/, /współpracownicy/ i /komentujący/.",
+                "collaborators": "$~Każda osoba ma jedno /uprawnienie/. *Współpracować* znaczy, że może edytować projekt i rozmawiać o nim. *Komentować* znaczy, że może rozmawiać, ale nie edytować. *Przeglądać* znaczy, że może patrzeć, ale nie rozmawiać. *Właściciel* dostaje projekt na własność. /Kuratorzy/ galerii mają zawsze dostęp, więc nie możesz zmienić ich uprawnień.",
+                "restrict": "$~Gdy projekt znajduje się w *galerii*, domyślnie *każdy*, kto może zobaczyć galerię, może zobaczyć Twój projekt. Przełącznik /restrict/ *ukrywa* go przed wszystkimi oprócz Ciebie i kuratorów galerii.",
+                "add": "$~Naciśnij *+* na końcu listy, aby kogoś dodać. Wpisz jego *e-mail* lub *nazwę użytkownika*, wybierz, co może robić, a dołączy do listy."
+            },
+            "translate": {
+                "label": "$~Przetłumacz wiadomości na",
+                "off": "$~Zatrzymaj tłumaczenie",
+                "error": "$~Nie udało się przetłumaczyć tych wiadomości na $to. Spróbuj ponownie za jakiś czas.",
+                "messageError": "$~Nie udało się przetłumaczyć tej wiadomości.",
+                "direction": "$from → $to",
+                "messageErrors": "$~$#count[Nie udało się przetłumaczyć $count wiadomości.|Nie udało się przetłumaczyć $count wiadomości.|Nie udało się przetłumaczyć $count wiadomości.|Nie udało się przetłumaczyć $count wiadomości.]",
+                "translating": "$~Tłumaczenie wiadomości…",
+                "translated": "$~$#count[Przetłumaczono $count wiadomość na $language.|Przetłumaczono $count wiadomości na $language.|Przetłumaczono $count wiadomości na $language.|Przetłumaczono $count wiadomości na $language.]",
+                "writingIn": "$~Piszę w",
+                "downloading": "$~Pobieranie tłumacza dla języka $language do twojej przeglądarki…",
+                "onDevice": "$~Twoja przeglądarka przetłumaczyła to na twoim urządzeniu, więc żadne wiadomości nie zostały do nas wysłane.",
+                "none": "$~Nie tłumacz",
+                "dismiss": "$~odrzuć"
             },
             "translate": {
                 "label": "$~Przetłumacz wiadomości na",
@@ -8594,7 +8621,54 @@
                 "nothing": "$~Nie ma tu nic do przetłumaczenia na $to. Nigdy nie tłumaczymy twoich własnych wiadomości."
             },
             "announce": {
-                "transferred": "$~$name jest teraz właścicielem $project"
+                "transferred": "$~$name jest teraz właścicielem $project",
+                "privilege": "$~$name może teraz $privilege",
+                "removed": "$~$name nie ma już dostępu do tego projektu",
+                "thread": "$~$#count[Wątek pod wiadomością $name, $count odpowiedź|Wątek pod wiadomością $name, $count odpowiedzi|Wątek pod wiadomością $name, $count odpowiedzi|Wątek pod wiadomością $name, $count odpowiedzi]",
+                "reacted": "$~$#count[$emoji pod tą wiadomością, $count osoba|$emoji pod tą wiadomością, $count osoby|$emoji pod tą wiadomością, $count osób|$emoji pod tą wiadomością, $count osoby]",
+                "unreacted": "$~$#count[Cofnięto $emoji, $count osoba odeszła|Cofnięto $emoji, $count osoby odeszły|Cofnięto $emoji, $count osób odeszło|Cofnięto $emoji, $count osoby odeszły]",
+                "attached": "$~Rozmowa o $location.",
+                "found": "$~$name powiedział(a) $opening"
+            },
+            "table": {
+                "label": "$~kto ma dostęp do tego projektu",
+                "choose": "$~co może robić $name",
+                "adding": "$~co ta osoba może robić",
+                "audience": "$~kto widzi ten czat",
+                "add": "$~dodaj kogoś",
+                "cancel": "$~nie dodawaj nikogo"
+            },
+            "prompt": "$~Dodaj współpracowników, komentujących i widzów",
+            "thread": {
+                "reply": "$~odpowiedz",
+                "replies": "$~$#count[$count odpowiedź|$count odpowiedzi|$count odpowiedzi|$count odpowiedzi]",
+                "unseen": "$~$#count[$count nowa odpowiedź|$count nowe odpowiedzi|$count nowych odpowiedzi|$count nowej odpowiedzi]",
+                "header": "$~Wątek",
+                "back": "$~wróć do rozmowy",
+                "empty": "$~Jeszcze nie ma odpowiedzi. Powiedz coś!",
+                "placeholder": "$~Odpowiedz…"
+            },
+            "reaction": {
+                "add": "$~zareaguj",
+                "more": "$~więcej…",
+                "label": "$~Wybierz reakcję",
+                "full": "$~Ta wiadomość ma już wszystkie możliwe reakcje.",
+                "close": "$~zamknij reakcje",
+                "pick": "$~zareaguj emotikoną $emoji",
+                "give": "$~$#count[dodaj swoją reakcję $emoji — ma ją $count osoba|dodaj swoją reakcję $emoji — mają ją $count osoby|dodaj swoją reakcję $emoji — ma ją $count osób|dodaj swoją reakcję $emoji — ma ją $count osoby]",
+                "take": "$~$#count[cofnij swoją reakcję $emoji — ma ją $count osoba|cofnij swoją reakcję $emoji — mają ją $count osoby|cofnij swoją reakcję $emoji — ma ją $count osób|cofnij swoją reakcję $emoji — ma ją $count osoby]"
+            },
+            "reference": {
+                "mode": {
+                    "on": "$~przestań rozmawiać o tym kodzie",
+                    "off": "$~porozmawiaj o kodzie w miejscu, gdzie jest mój kursor"
+                },
+                "prompt": "$~Twoja wiadomość dotyczy $location.",
+                "line": "$~linia $line",
+                "lines": "$~linie $first–$last",
+                "label": "$~o $location: $code",
+                "invalid": "$~tego kodu już nie ma",
+                "marker": "$~$#count[przeczytaj wiadomość o tym kodzie|przeczytaj $count wiadomości o tym kodzie|przeczytaj $count wiadomości o tym kodzie|przeczytaj $count wiadomości o tym kodzie]"
             }
         },
         "palette": {
@@ -8855,7 +8929,7 @@
                         ]
                     },
                     "example": {
-                        "phrase": "$~\\¶Frazy pojawiają się na scenie, w dowolnym kolorze, blasku i ruchu, jaki lubisz.¶\nWyrażenie(\n\t'cześć!'\n\t6m\n\tkolor: Kolor(60% 90 200°)\n\taura: Aura(Kolor(80% 80 200°) 0.3m)\n\tspoczynkowy: Sekwencja.kołysać(8°)\n)\\",
+                        "phrase": "$~\\¶@Phrase pojawia się na scenie, w dowolnym kolorze, blasku i ruchu, jaki chcesz.¶\nWyrażenie(\n\t'witaj!'\n\t6m\n\tkolor: Kolor(60% 90 200°)\n\taura: Aura(Kolor(80% 80 200°) 0.3m)\n\tspoczynkowy: Sekwencja.kołysać(8°)\n)\\",
                         "music": "$~\\¶Muzyka to dźwięki grane na prawdziwych instrumentach, w danym tempie i tonacji. Scena rysuje to, co słyszy.¶\nMuzyka(\n\tŚcieżka([1 3 5 8 5 3] instrument: Instrument.pianino)\n\ttempo: 120beats/min\n)\\",
                         "hello": "$~\\¶Kod może reagować na wejście, takie jak @Time, a tekst może być wielojęzyczny i mówiony.¶\npowitania: ['cześć'/pl 'hola'/es 'こんにちは'/ja 'habari'/sw 'नमस्ते'/hi]\ncześć: powitania.losowy() … ∆ Czas(1000ms) … powitania.losowy(\n\t\t)\nWyrażenie(cześć 4m)\nMowić(cześć)\\",
                         "keys": "$~\\¶Kod może reagować na ruch wskaźnika, klawisze, kliknięcia i dotknięcia.¶\nklawisz2: Klawisz()\nkliknięcie: Przycisk()\nbuźki: ['🙂' '😮' '😎' '🤩']\nktóry: 1 … ∆ klawisz2 | ∆ kliknięcie … (który % 4) + 1\nScena(\n\t[\n\t\tWyrażenie(\n\t\t\tbuźki[który]\n\t\t\t5m\n\t\t\tmiejsce: Wskaźnik()\n\t\t\tdymek: 'cześć'\n\t\t)\n\t]\n\tmiejsce: Miejsce(0m 0m -12m)\n)\\",
@@ -8994,7 +9068,11 @@
                 },
                 "contrast": "$~porównać z",
                 "dialogue": "$~dialog lekcji",
-                "says": "$~$character mówi"
+                "says": "$~$character mówi",
+                "tour": {
+                    "skip": "$~pomiń wycieczkę i idź dalej",
+                    "wait": "$~Najpierw odbądź wycieczkę albo ją pomiń, a potem idziemy dalej."
+                }
             },
             "teach": {
                 "header": "$~Uczyć",

@@ -171,6 +171,14 @@
         "column": {
             "word": "$~colonne",
             "definition": "$~Un champ nommé dans une @Table."
+        },
+        "editor": {
+            "word": "$~éditeur",
+            "definition": "$~La boîte où tu écris le @code. Ce que tu tapes ici est ce que @wordplay exécute."
+        },
+        "stage": {
+            "word": "$~scène",
+            "definition": "$~L'espace où @wordplay montre ce que ton @code a créé."
         }
     },
     "terms": {},
@@ -541,7 +549,8 @@
                 "codepoint": "$~le caractère Unicode $concept",
                 "ui": "$~un lien vers l'élément d'interface $concept",
                 "how": "$~un lien vers le tutoriel $concept",
-                "character": "$~le caractère personnalisé $concept"
+                "character": "$~le caractère personnalisé $concept",
+                "tour": "$~un lien vers une visite guidée de $concept"
             }
         },
         "Words": {
@@ -1943,7 +1952,7 @@
             "name": "$~taper de table",
             "description": "$~table",
             "emotion": "angry",
-            "doc": "$~Je représente une Table.",
+            "doc": "$~Je représente un @Table.",
             "conflict": {
                 "ExpectedColumnType": {
                     "name": "$~type de colonne manquant",
@@ -7512,7 +7521,7 @@
             "label": "$~conflits et aide",
             "cursor": "$~Ceci est *$node*$type[ et c'est un $type|].",
             "cursorDoc": "$~Ils disent : « $description »",
-            "cursorParent": "$~Ils sont à l'intérieur d'un *$node*$type[ de type $type|].",
+            "cursorParent": "$~Ils sont à l'intérieur d'un *$node*$type[, qui donne un $type|].",
             "learn": "$~/Apprendre encore plus/",
             "evaluating": "$~Oh c'est amusant, évaluons !",
             "space": "$~C'est l'espace ! Qui aurait cru que rien ne pouvait en dire autant ?",
@@ -7995,7 +8004,7 @@
                 },
                 "field": {
                     "emailOrUsername": {
-                        "placeholder": "$~email ou nom d'utilisateur",
+                        "placeholder": "$~e-mail/nom d'utilisateur",
                         "description": "$~e-mail ou nom d'utilisateur de la personne à qui vous souhaitez donner l'accès en modification"
                     },
                     "preview": {
@@ -8292,6 +8301,21 @@
                         "tips": [
                             "$~Ne fait aucun son quand une sortie entre en collision",
                             "$~Joue un petit son quand une sortie entre en collision, plus fort si le choc est violent"
+                        ]
+                    },
+                    "placement": {
+                        "label": "$~placement de la scène",
+                        "labels": [
+                            "$~en haut à gauche",
+                            "$~en haut à droite",
+                            "$~en bas à gauche",
+                            "$~en bas à droite"
+                        ],
+                        "tips": [
+                            "$~placer la scène en haut à gauche, et les autres tuiles aux places correspondantes autour d’elle",
+                            "$~placer la scène en haut à droite, et les autres tuiles aux places correspondantes autour d’elle",
+                            "$~placer la scène en bas à gauche, et les autres tuiles aux places correspondantes autour d’elle",
+                            "$~placer la scène en bas à droite, et les autres tuiles aux places correspondantes autour d’elle"
                         ]
                     }
                 },
@@ -8732,15 +8756,15 @@
                         ]
                     },
                     "example": {
-                        "phrase": "$~\\¶Les Phrases apparaissent sur la scène, avec la couleur, la lueur et le mouvement que tu veux.¶\nPhrase(\n\t'bonjour !'\n\t6m\n\tcouleur: Couleur(60% 90 200°)\n\taura: Aura(Couleur(80% 80 200°) 0.3m)\n\taurepos: Séquence.balancement(8°)\n)\\",
-                        "music": "$~\\¶Music is notes on real instruments, at a tempo, in a key. The stage draws what it hears.¶\nMusic(\n\tTrack([1 3 5 8 5 3] instrument: Instrument.piano)\n\ttempo: 120beats/min\n)\\",
+                        "phrase": "$~\\¶@Phrase apparaît sur la scène, avec la couleur, la lueur et le mouvement que tu veux.¶\nPhrase(\n\t'salut !'\n\t6m\n\tcouleur: Couleur(60% 90 200°)\n\taura: Aura(Couleur(80% 80 200°) 0.3m)\n\taurepos: Séquence.balancement(8°)\n)\\",
+                        "music": "$~\\¶La musique, ce sont des notes jouées sur de vrais instruments, à un tempo, dans une tonalité. La scène dessine ce qu'elle entend.¶\nMusique(\n\tPiste([1 3 5 8 5 3] instrument: Instrument.piano)\n\ttempo: 120beats/min\n)\\",
                         "hello": "$~\\¶Le code peut réagir à une entrée comme @Time, et le texte peut être multilingue et parlé.¶\nbonjours: ['bonjour'/fr 'hola'/es 'こんにちは'/ja 'habari'/sw 'नमस्ते'/hi]\nbonjour: bonjours.aléatoire() … ∆ Temps(1000ms) … bonjours.aléatoire(\n\t\t)\nPhrase(bonjour 4m)\nDire(bonjour)\\",
                         "keys": "$~\\¶Le code peut réagir aux pointeurs, aux touches, aux clics et aux tapotements.¶\nclé2: Clé()\nclic: Bouton()\nvisages: ['🙂' '😮' '😎' '🤩']\nlequel: 1 … ∆ clé2 | ∆ clic … (lequel % 4) + 1\nScène(\n\t[Phrase(visages[lequel] 5m lieu: Aiguille() bulle: 'salut')]\n\tlieu: Lieu(0m 0m -12m)\n)\\",
                         "choose": "$~\\¶Mets en page du texte et rends-le sélectionnable.¶\nfruit: ƒ(e•'') Phrase(e 3m nom: e sélectionnable: ⊤)\nchoisi: Choix()\nmontré: '?' … ∆ choisi … choisi\nGroupe(\n\tEmpiler(rembourrage: 1m)\n\t[\n\t\tPhrase(montré 4m)\n\t\tGroupe(\n\t\t\tRangée(rembourrage: 1m)\n\t\t\t[fruit('🍎') fruit('🍐') fruit('🍒')]\n\t\t)\n\t]\n)\\",
                         "letters": "$~\\¶Discute avec des programmes et utilise la forme des polices et des symboles.¶\nmessage: Chat()\nmot2: 'salut' … ∆ message … message\nligne: Contour(mot2 'Noto Sans' 8m)\ntics: 0 … ∆ Temps(30ms) … tics + 1\nmontré: ((ligne.longueur() × tics) ÷ 66).arrondirverslebas(\n\t) + 1\npoints: ligne.sousséquence(1 montré).traduire(\n\t\tƒ(p) Phrase('•' lieu: p)\n\t)\nScène(points.avec(Phrase(mot2 8m opacité: 15%)))\\",
                         "pile": "$~\\¶Le texte peut avoir de la physique.¶\nlancer: ƒ(émoji•'' x2•#m y2•#m vx•#m/s)\n\t\tPhrase(\n\t\t\témoji\n\t\t\t2m\n\t\t\tlieu: Mouvement(Lieu(x2 y2) Vitesse(vx 0m/s))\n\t\t\tmatière: Matière(1kg 0.55 0.06 0.5)\n\t\t)\nScène(\n\t[\n\t\tlancer('🍎' -2m 5m 2.2m/s)\n\t\tlancer('🍊' 2m 7m -2.6m/s)\n\t\tlancer('🍋' -1m 9m 1.4m/s)\n\t\tlancer('🍇' 1.5m 11m -1.9m/s)\n\t\tlancer('🫐' 0.5m 15m -1.2m/s)\n\t\tForme(Rectangle(-4m -3m 4m -3.6m))\n\t\tForme(Rectangle(-4.6m 4m -4m -3m))\n\t\tForme(Rectangle(4m 4m 4.6m -3m))\n\t]\n)\\",
                         "listen": "$~\\¶Le code peut réagir au @Volume et au @Pitch de ton micro.¶\nPhrase(\n\t'📣'\n\t1m + (Volume() × 8m)\n\trotation: (Pas() ÷ 1hz) × 0.1°\n)\\",
-                        "smile": "$~\\¶Code can react to your @Face, and other things on @Camera.¶\nPhrase(Face().smiling ? '😄 thank you!' '🙂 smile at the camera' 2m)\\"
+                        "smile": "$~\\¶Le code peut réagir à ton @Face, et à d'autres choses sur @Camera.¶\nPhrase(\n\tVisage().souriant ? '😄 merci !' '🙂 souris à la caméra'\n\t2m\n)\\"
                     }
                 },
                 "features": {
@@ -8871,7 +8895,11 @@
                 },
                 "contrast": "$~comparer avec",
                 "dialogue": "$~dialogue de la leçon",
-                "says": "$~$character dit"
+                "says": "$~$character dit",
+                "tour": {
+                    "skip": "$~passer la visite guidée et continuer",
+                    "wait": "$~Fais d'abord la visite guidée, ou passe-la, puis nous continuerons."
+                }
             },
             "guide": {
                 "header": "$~Guide",
@@ -9847,10 +9875,10 @@
             "label": "$~collaborer",
             "role": {
                 "owner": "$~propriétaire",
-                "collaborators": "$~collaborateurs (modifier et discuter)",
-                "curators": "$~conservateurs",
-                "commenters": "$~commentateurs (discuter seulement)",
-                "viewers": "$~téléspectateurs"
+                "collaborate": "$~collaborer",
+                "comment": "$~commenter",
+                "view": "$~voir",
+                "curate": "$~organiser"
             },
             "field": {
                 "message": {
@@ -9863,15 +9891,12 @@
                     "label": "$~Envoyer",
                     "tip": "$~envoyer un message à tes collaborateurs et"
                 },
-                "start": {
-                    "label": "$~Démarrer une discussion",
-                    "tip": "$~commencer une discussion avec toi-même ou avec d'autres."
-                },
                 "delete": "$~supprimer ce message",
                 "confirmDelete": "$~confirmer la suppression ?",
                 "transfer": {
                     "description": "$~faire de cette personne le propriétaire du projet",
-                    "prompt": "$~Faire d'elle le propriétaire ? Tu resteras collaborateur et pourras continuer à modifier le projet, mais tu ne pourras plus le supprimer."
+                    "prompt": "$~En faire le propriétaire ?",
+                    "consequence": "$~Tu resteras collaborateur et pourras continuer à modifier, mais tu ne pourras plus supprimer ce projet."
                 }
             },
             "error": {
@@ -9880,13 +9905,6 @@
                 "empty": "$~Aucun message.",
                 "deleted": "$~Ce message a été supprimé.",
                 "transferGallery": "$~Ce projet se trouve dans une galerie. Le donner à quelqu'un d'autre ne l'ajoute pas à cette galerie, donc cette personne pourrait ne pas pouvoir l'y voir."
-            },
-            "prompt": {
-                "solo": "$~Discute avec toi-même ou ajoute...",
-                "owner": "$~Les collaborateurs peuvent modifier ce projet et en discuter. Les commentateurs peuvent discuter mais ne peuvent pas modifier ce projet. Les spectateurs peuvent voir ce projet mais ne peuvent pas discuter.",
-                "collaborator": "$~Vous êtes un collaborateur. Vous pouvez éditer ce projet et en discuter.",
-                "curator": "$~Tu es un conservateur de la galerie de ce projet. Tu peux modifier ce projet et en discuter. Seuls le propriétaire du projet, les collaborateurs et les commentateurs peuvent voir la discussion.",
-                "commenter": "$~Vous êtes un commentateur. Vous pouvez discuter de ce projet, mais vous ne pouvez pas le modifier."
             },
             "moderation": {
                 "header": "$~Signaler ce message",
@@ -9904,7 +9922,6 @@
                 "inGallery": "$~Cette discussion se déroule dans une galerie. Elle est soumise à la modération des responsables de la galerie. Vous pouvez signaler les messages qui enfreignent nos <normes communautaires@://droits> pour modération."
             },
             "restrictGalleryCreatorAccess": {
-                "explanation": "$~Votre projet est exposé dans une galerie. Par défaut, toute personne ayant accès à cette galerie peut voir votre projet. Vous pouvez limiter l'accès à votre projet à vous-même et aux conservateurs de la galerie.",
                 "mode": {
                     "label": "$~restreindre l'accès au projet",
                     "labels": ["$~ne pas restreindre", "$~limiter"],
@@ -9916,11 +9933,25 @@
             },
             "tour": {
                 "launch": "$~faire un tour d'horizon de la collaboration",
-                "collaborate": "$~Les projets peuvent être partagés avec d'autres personnes, et vous pouvez discuter avec toutes les personnes avec lesquelles le projet est partagé directement ici.",
-                "collaborators": "$~Les collaborateurs peuvent modifier le projet et en discuter avec vous.",
-                "commenters": "$~Les commentateurs peuvent discuter du projet avec vous, mais ils ne peuvent pas le modifier.",
-                "viewers": "$~Les /Viewers/ peuvent *voir* le projet et son *code*, mais ils ne peuvent ni le *discuter* ni le *modifier*.",
-                "restrict": "$~Lorsqu'un projet est dans une galerie, par défaut, toute personne ayant accès à la galerie peut le voir. L'option /restrict/ le masque à tous, sauf à vous et aux responsables de la galerie."
+                "collaborate": "$~Toutes les personnes qui peuvent accéder à ce projet sont listées ici, et tu peux *discuter* avec celles qui en ont le droit. Seuls le /propriétaire/, les /collaborateurs/ et les /commentateurs/ peuvent voir la discussion.",
+                "collaborators": "$~Chaque personne a un seul /privilège/. *Collaborer* veut dire qu'elle peut modifier le projet et discuter à son sujet. *Commenter* veut dire qu'elle peut discuter mais pas modifier. *Voir* veut dire qu'elle peut regarder mais pas discuter. *Propriétaire* lui donne le projet. Les /organisateurs/ d'une galerie peuvent toujours y accéder, donc tu ne peux pas changer leur statut.",
+                "restrict": "$~Lorsqu'un projet est dans une galerie, par défaut, toute personne ayant accès à la galerie peut le voir. L'option /restrict/ le masque à tous, sauf à vous et aux responsables de la galerie.",
+                "add": "$~Appuie sur *+* à la fin de la liste pour ajouter quelqu'un. Tape son *email* ou son *nom d'utilisateur*, choisis ce qu'il peut faire, et il rejoindra la liste."
+            },
+            "translate": {
+                "label": "$~Traduire les messages en",
+                "off": "$~Arrêter la traduction",
+                "error": "$~Nous n'avons pas pu traduire ces messages en $to. Réessaie un peu plus tard.",
+                "messageError": "$~Nous n'avons pas pu traduire ce message.",
+                "direction": "$from → $to",
+                "messageErrors": "$~$#count[Nous n'avons pas pu traduire $#count message.|Nous n'avons pas pu traduire $count millions de messages.|Nous n'avons pas pu traduire $count messages.]",
+                "translating": "$~Traduction des messages en cours…",
+                "translated": "$~$#count[$count message traduit en $language.|$count millions de messages traduits en $language.|$count messages traduits en $language.]",
+                "writingIn": "$~J'écris en",
+                "downloading": "$~Recherche d'un traducteur $language pour ton navigateur…",
+                "onDevice": "$~Ton navigateur a traduit ces messages sur ton appareil, donc aucun message ne nous a été envoyé.",
+                "none": "$~Ne pas traduire",
+                "dismiss": "$~fermer"
             },
             "translate": {
                 "label": "$~Traduire les messages en",
@@ -9941,7 +9972,54 @@
                 "nothing": "$~Il n'y a rien ici à traduire en $to. Nous ne traduisons jamais tes propres messages."
             },
             "announce": {
-                "transferred": "$~$name est maintenant le propriétaire de $project"
+                "transferred": "$~$name est maintenant le propriétaire de $project",
+                "privilege": "$~$name peut maintenant $privilege",
+                "removed": "$~$name ne peut plus accéder à ce projet",
+                "thread": "$~$#count[Fil de discussion sur le message de $name, $count réponse|Fil de discussion sur le message de $name, $count réponses|Fil de discussion sur le message de $name, $count réponses]",
+                "reacted": "$~$#count[$emoji sur ce message, $count personne|$emoji sur ce message, $count personnes|$emoji sur ce message, $count personnes]",
+                "unreacted": "$~$#count[$emoji retiré, $count personne est partie|$emoji retiré, $count personnes sont parties|$emoji retiré, $count personnes sont parties]",
+                "attached": "$~On parle de $location.",
+                "found": "$~$name a dit $opening"
+            },
+            "table": {
+                "label": "$~qui peut accéder à ce projet",
+                "choose": "$~ce que $name peut faire",
+                "adding": "$~ce qu'elle peut faire",
+                "audience": "$~qui peut voir cette discussion",
+                "add": "$~ajouter quelqu'un",
+                "cancel": "$~annuler l'ajout de quelqu'un"
+            },
+            "prompt": "$~Ajouter des collaborateurs, des commentateurs et des visiteurs",
+            "thread": {
+                "reply": "$~répondre",
+                "replies": "$~$#count[$#count réponse|$count réponses|$count réponses]",
+                "unseen": "$~$#count[$#count nouvelle réponse|$count nouvelles réponses|$count nouvelles réponses]",
+                "header": "$~Fil de discussion",
+                "back": "$~retour à la conversation",
+                "empty": "$~Aucune réponse pour l'instant. Dis quelque chose !",
+                "placeholder": "$~Répondre…"
+            },
+            "reaction": {
+                "add": "$~réagir",
+                "more": "$~plus…",
+                "label": "$~Choisis une réaction",
+                "full": "$~Ce message a déjà toutes les réactions qu'il peut recevoir.",
+                "close": "$~fermer les réactions",
+                "pick": "$~réagir avec $emoji",
+                "give": "$~$#count[ajoute ton $emoji — $count personne l'a déjà mis|ajoute ton $emoji — $count personnes l'ont déjà mis|ajoute ton $emoji — $count personnes l'ont déjà mis]",
+                "take": "$~$#count[retire ton $emoji — $count personne l'a mis|retire ton $emoji — $count personnes l'ont mis|retire ton $emoji — $count personnes l'ont mis]"
+            },
+            "reference": {
+                "mode": {
+                    "on": "$~arrêter de parler de ce code",
+                    "off": "$~parler du code où se trouve mon curseur"
+                },
+                "prompt": "$~Ton message parle de $location.",
+                "line": "$~ligne $line",
+                "lines": "$~lignes $first–$last",
+                "label": "$~à propos de $location : $code",
+                "invalid": "$~ce code a disparu",
+                "marker": "$~$#count[lire le message à propos de ce code|lire les $#count messages à propos de ce code|lire les $count messages à propos de ce code]"
             }
         },
         "checkpoints": {

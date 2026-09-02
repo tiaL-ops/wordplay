@@ -376,13 +376,81 @@ test('resolving a color needs no basis', () => {
  * file's rule above allows a file budget to move by one for. Not a subgraph: it
  * is what keeps a reload from looking as though the translations had been
  * thrown away, when only the choice had.
+ *
+ * Redesigning the collaborate tile around a table of people is text again, and
+ * on balance nearly a wash: twelve locale keys out (five role paragraphs, four
+ * plural role labels, two tour steps, a gallery explanation, and the "start a
+ * chat" button, which went when a chat became something you make by talking)
+ * against fourteen in (the privilege words, the table's own labels, two
+ * announcements, a tour step, the first-use prompt, and the row naming who can
+ * see the chat). `Page.svelte` is the one entry with no slack left for the few
+ * hundred bytes of difference, so only its byte budget moves; the components
+ * themselves hang off `CollaborateView`, which none of these five reaches.
+ *
+ * Floating a field's validation message is **+1 file** on every entry:
+ * `validationMessage.ts`, the placement both text widgets share. It is a pure
+ * function with no imports of its own — the case this file's rule above allows
+ * a file budget to move by one for — and it is in all five graphs because
+ * `TextField` and `TextBox` are. It buys a message that nothing can clip,
+ * paint over, or mis-position — it goes in the top layer, which is the only
+ * place immune to all three, since a field's ancestors routinely carry a
+ * `z-index` or a `transform` and either one traps a merely-fixed element. One
+ * place decides where a message goes, rather than two that drift.
+ *
+ * Pointing the tutorial at the interface tours (#984) is **+3 files** and
+ * +0.01MB on every entry, and all three files are the leaf case this file's
+ * rule allows: `tours.ts`, which names each tour and has no runtime imports at
+ * all so that `ConceptLink` can validate a `@Tour/<id>` reference without the
+ * parser reaching into components; `ToursSetting.ts`, one more settings leaf
+ * reached through `SettingsDatabase` exactly like the folder settings above;
+ * and `TourLink.svelte`, which renders such a reference as the control that
+ * starts the tour. They are in all five graphs because every page reaches
+ * markup, and markup reaches `ConceptLinkUI`.
+ *
+ * What the tours *say* is deliberately not here: the step lists live in
+ * `tourSteps.ts`, which only the project view imports. Keeping them with the
+ * names would have been tidier and would have moved seven more kilobytes of
+ * explanation into four pages that cannot run a tour — the leak this file
+ * exists to catch, just a small one. The bytes that do move are the three
+ * files plus the tours' two new glossary terms and the tutorial's skip and
+ * wait strings in en-US.json, which every page carries.
+ *
+ * Remembering which chat threads a creator has read (#821) is **+1 file** on
+ * every entry, and it is the settings-leaf case again: `ChatThreadsSetting.ts`
+ * imports only `Setting`, exactly like `ChatLanguageSetting` and `ToursSetting`
+ * above, and is reached through `SettingsDatabase`. Having read a thread is
+ * true of the person rather than the device, so it has to ride in the creator's
+ * settings for the "new replies" marker to mean anything on a second device.
+ * The reply, reaction, and code-reference *views* are not here and must not
+ * become so: they hang off `ChatView`, which none of these five reaches, and
+ * the two modules behind them (`chats/threads.ts`, `chat/chatAnnounce.ts`) are
+ * imported only from there.
+ *
+ * The bytes those two features move are text again, and text every page
+ * carries: the thread, reaction, and code-reference strings in en-US.json,
+ * plus the template-input declarations generated from them. That is +0.01MB
+ * on three of the five, and +0.02 on the layout and `Page.svelte`, which had
+ * the least slack.
+ *
+ * **The byte caps carry deliberate headroom, and did not used to.** They were
+ * last set to the then-exact reach of each entry, which sounds strict and is
+ * really a trap: what this test exists to catch is a new *dependency* — an
+ * import that drags the evaluator or colorjs.io onto a page that has no use for
+ * it, worth tenths of a megabyte — and a cap with no slack instead fails on a
+ * paragraph of explanation added to a shared widget. That happened twice in one
+ * change: a comment in `Contexts.ts` and then comments in `TextField` and
+ * `CreatorView`, all of them files every page reaches by design. So each cap is
+ * now the next round number above its entry, leaving a few kilobytes of room
+ * for prose while staying far below what a real leak costs. The file counts are
+ * unchanged and stay exact, since those *do* move one at a time and are the
+ * sharper signal.
  */
 test.each([
-    ['src/routes/+layout.svelte', 495, 3.61],
-    ['src/components/app/Page.svelte', 518, 3.85],
-    ['src/routes/[[locale]]/+page.svelte', 533, 3.94],
-    ['src/routes/[[locale]]/galleries/+page.svelte', 537, 3.95],
-    ['src/routes/[[locale]]/projects/+page.svelte', 544, 3.98],
+    ['src/routes/+layout.svelte', 502, 3.66],
+    ['src/components/app/Page.svelte', 525, 3.91],
+    ['src/routes/[[locale]]/+page.svelte', 540, 4.0],
+    ['src/routes/[[locale]]/galleries/+page.svelte', 544, 4.01],
+    ['src/routes/[[locale]]/projects/+page.svelte', 551, 4.03],
 ])('%s stays within its import budget', (entry, maxFiles, maxMB) => {
     const reach = reachFrom(entry, Root);
     expect(

@@ -121,6 +121,16 @@
             "word": "blocks",
             "definition": "A way to edit @code by dragging pieces instead of typing."
         },
+        "editor": {
+            "word": "editor",
+            "forms": ["editors"],
+            "definition": "The box where you write @code. What you type there is what @wordplay performs."
+        },
+        "stage": {
+            "word": "stage",
+            "forms": ["stages"],
+            "definition": "The space where @wordplay shows what your @code made."
+        },
         "placeholder": {
             "word": "placeholder",
             "forms": ["placeholders"],
@@ -563,6 +573,7 @@
             "kind": {
                 "codepoint": "the Unicode character $concept",
                 "ui": "a link to the $concept interface element",
+                "tour": "a link to a tour of the $concept",
                 "how": "a link to the $concept how-to",
                 "character": "the custom character $concept"
             },
@@ -2326,7 +2337,7 @@
             "name": "table type",
             "description": "table",
             "emotion": "angry",
-            "doc": "I represent a Table.",
+            "doc": "I represent a @Table.",
             "conflict": {
                 "ExpectedColumnType": {
                     "name": "missing column type",
@@ -7825,7 +7836,7 @@
             "label": "conflicts and help",
             "cursor": "This is *$node*$type[ and they are a $type|].",
             "cursorDoc": "They say: “$description”",
-            "cursorParent": "They're inside a *$node*$type[ of type $type|].",
+            "cursorParent": "They're inside a *$node*$type[, which evaluates to a $type|].",
             "learn": "/Learn more/",
             "evaluating": "Oh fun, let's evaluate!",
             "space": "This is space! Who knew nothing could say so much?",
@@ -8354,7 +8365,7 @@
                 },
                 "field": {
                     "emailOrUsername": {
-                        "placeholder": "email or username",
+                        "placeholder": "email/username",
                         "description": "email or username of the person who you want to give edit access"
                     },
                     "preview": {
@@ -8447,6 +8458,21 @@
                             "two most recent tiles, side by side",
                             "only the most recent tile",
                             "moveable and resizable tiles on a canvas"
+                        ]
+                    },
+                    "placement": {
+                        "label": "stage placement",
+                        "labels": [
+                            "top left",
+                            "top right",
+                            "bottom left",
+                            "bottom right"
+                        ],
+                        "tips": [
+                            "place the stage in the top left, and the other tiles in matching places around it",
+                            "place the stage in the top right, and the other tiles in matching places around it",
+                            "place the stage in the bottom left, and the other tiles in matching places around it",
+                            "place the stage in the bottom right, and the other tiles in matching places around it"
                         ]
                     },
                     "animate": {
@@ -8805,25 +8831,15 @@
                 "none": "Don't translate",
                 "off": "Stop translating",
                 "dismiss": "dismiss",
-                "moreLanguages": "Find another language",
-                "fewerLanguages": "Hide the language search",
                 "writingIn": "I'm writing in",
                 "translating": "Translating messages…",
                 "downloading": "Getting a $language translator for your browser…",
                 "translated": "$#count[Translated $count message into $language.|Translated $count messages into $language.]",
                 "direction": "$from → $to",
                 "onDevice": "Your browser translated these on your device, so no messages were sent to us.",
-                "nothing": "There's nothing here to translate into $to. We never translate your own messages.",
                 "error": "We couldn't translate these messages into $to. Try again in a little while.",
                 "messageError": "We couldn't translate this message.",
                 "messageErrors": "$#count[We couldn't translate $count message.|We couldn't translate $count messages.]"
-            },
-            "role": {
-                "owner": "owner",
-                "collaborators": "collaborators (edit and chat)",
-                "curators": "curators",
-                "commenters": "commenters (chat only)",
-                "viewers": "viewers"
             },
             "field": {
                 "message": {
@@ -8831,20 +8847,64 @@
                     "placeholder": "Type a message"
                 }
             },
+            "thread": {
+                "reply": "reply",
+                "replies": "$#count[$count reply|$count replies]",
+                "unseen": "$#count[$count new reply|$count new replies]",
+                "header": "Thread",
+                "back": "back to the conversation",
+                "empty": "No replies yet. Say something!",
+                "placeholder": "Reply…"
+            },
+            "reaction": {
+                "add": "react",
+                "close": "close the reactions",
+                "more": "more…",
+                "label": "Choose a reaction",
+                "pick": "react with $emoji",
+                "give": "$#count[add your $emoji — $count person has|add your $emoji — $count people have]",
+                "take": "$#count[take back your $emoji — $count person has it|take back your $emoji — $count people have it]",
+                "full": "This message has all the reactions it can hold."
+            },
+            "reference": {
+                "mode": {
+                    "on": "stop talking about this code",
+                    "off": "talk about the code where my cursor is"
+                },
+                "prompt": "Your message is about $location.",
+                "line": "line $line",
+                "lines": "lines $first–$last",
+                "label": "about $location: $code",
+                "invalid": "this code is gone",
+                "marker": "$#count[read the message about this code|read the $count messages about this code]"
+            },
+            "prompt": "Add collaborators, commenters, and viewers",
+            "role": {
+                "owner": "owner",
+                "collaborate": "collaborate",
+                "comment": "comment",
+                "view": "view",
+                "curate": "curate"
+            },
+            "table": {
+                "label": "who can reach this project",
+                "choose": "what $name can do",
+                "adding": "what they can do",
+                "audience": "who can see this chat",
+                "add": "add someone",
+                "cancel": "never mind adding someone"
+            },
             "button": {
                 "submit": {
                     "label": "send",
                     "tip": "send a message to your collaborators and "
                 },
-                "start": {
-                    "label": "start a chat",
-                    "tip": "begin a discussion with yourself or others."
-                },
                 "delete": "delete this message",
                 "confirmDelete": "confirm delete?",
                 "transfer": {
                     "description": "make this person the owner of the project",
-                    "prompt": "Make them the owner? You will stay a collaborator and can keep editing, but you will no longer be able to delete this project."
+                    "prompt": "Make them the owner?",
+                    "consequence": "You will stay a collaborator and can keep editing, but you will no longer be able to delete this project."
                 }
             },
             "moderation": {
@@ -8869,15 +8929,17 @@
                 "deleted": "This message was deleted.",
                 "transferGallery": "This project is in a gallery. Giving it to someone else does not add them to that gallery, so they may not be able to see it there."
             },
-            "prompt": {
-                "solo": "Chat with yourself or add...",
-                "owner": "Collaborators can edit this project and chat about it. Commenters can chat but cannot edit this project. Viewers can view this project but cannot chat.",
-                "collaborator": "You're a collaborator. You can edit this project and chat about it.",
-                "curator": "You're a curator of this project's gallery. You can edit this project and chat about it. Only the project's owner, collaborators, and commenters can see the chat.",
-                "commenter": "You're a commenter. You can chat about this project but cannot edit it."
+            "announce": {
+                "transferred": "$name is now the owner of $project",
+                "privilege": "$name can now $privilege",
+                "removed": "$name can no longer reach this project",
+                "thread": "$#count[Thread on $name's message, $count reply|Thread on $name's message, $count replies]",
+                "reacted": "$#count[$emoji on this message, $count person|$emoji on this message, $count people]",
+                "unreacted": "$#count[Took back $emoji, $count person left|Took back $emoji, $count people left]",
+                "attached": "Talking about $location.",
+                "found": "$name said $opening"
             },
             "restrictGalleryCreatorAccess": {
-                "explanation": "Your project is in a gallery. By default, anyone who can see this gallery can see this project. You can restrict who can see your project to only you and the gallery curators.",
                 "mode": {
                     "label": "restrict project access",
                     "labels": ["do not restrict", "restrict"],
@@ -8889,14 +8951,10 @@
             },
             "tour": {
                 "launch": "take a tour of collaborating",
-                "collaborate": "Projects can be /shared/ with other people, and you can *chat* with everyone the project is shared with right here.",
-                "collaborators": "/Collaborators/ can *edit* the project and *chat* about it with you.",
-                "commenters": "/Commenters/ can *discuss* the project with you, but they cannot *edit* it.",
-                "viewers": "/Viewers/ can *view* the project and its *code*, but they cannot *discuss* or *edit* it.",
+                "collaborate": "Everyone who can reach this project is listed here, and you can *chat* with the people who are allowed to. Only the /owner/, /collaborators/, and /commenters/ can see the chat.",
+                "collaborators": "Each person has one /privilege/. *Collaborate* means they can edit the project and chat about it. *Comment* means they can chat but not edit. *View* means they can look but not chat. *Owner* hands them the project. A gallery's /curators/ can always reach it, so you cannot change theirs.",
+                "add": "Press the *+* at the end of the list to add someone. Type their *email* or *username*, choose what they can do, and they'll join the list.",
                 "restrict": "When a project is in a *gallery*, by default *everyone* who can see the gallery can see your project. The /restrict/ toggle *hides* it from everyone except you and the gallery curators."
-            },
-            "announce": {
-                "transferred": "$name is now the owner of $project"
             }
         },
         "presence": {
@@ -9263,7 +9321,7 @@
                         ]
                     },
                     "example": {
-                        "phrase": "\\¶Phrases appear on stage, in any color, glow, and motion you like.¶\nPhrase(\n\t'hello!'\n\t6m\n\tcolor: 🌈(60% 90 200°)\n\taura: Aura(🌈(80% 80 200°) 0.3m)\n\tresting: Sequence.sway(8°)\n)\\",
+                        "phrase": "\\¶@Phrase appears on stage, in any color, glow, and motion you like.¶\nPhrase(\n\t'hello!'\n\t6m\n\tcolor: 🌈(60% 90 200°)\n\taura: Aura(🌈(80% 80 200°) 0.3m)\n\tresting: Sequence.sway(8°)\n)\\",
                         "music": "\\¶Music is notes on real instruments, at a tempo, in a key. The stage draws what it hears.¶\nMusic(\n\tTrack([1 3 5 8 5 3] instrument: Instrument.piano)\n\ttempo: 120beats/min\n)\\",
                         "hello": "\\¶Code can react to input like @Time, and text can be multilingual and spoken.¶\nhellos: ['hello'/en 'hola'/es 'こんにちは'/ja 'habari'/sw 'नमस्ते'/hi]\nhello: hellos.random() … ∆ Time(1000ms) … hellos.random()\nPhrase(hello 4m)\nSay(hello)\\",
                         "keys": "\\¶Code can react to pointers, keys, clicks, and taps.¶\nkey: Key()\nclick: Button()\nfaces: ['🙂' '😮' '😎' '🤩']\nwhich: 1 … ∆ key | ∆ click … (which % 4) + 1\nStage([Phrase(faces[which] 5m place: Pointer() bubble: 'hi')] place: Place(0m 0m -12m))\\",
@@ -9417,6 +9475,10 @@
                 "button": {
                     "next": "next pause in dialog",
                     "previous": "previous pause in dialog"
+                },
+                "tour": {
+                    "skip": "skip the tour and keep going",
+                    "wait": "Take the tour first, or skip it, and then we'll keep going."
                 },
                 "options": {
                     "lesson": "current lesson"

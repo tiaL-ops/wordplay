@@ -171,6 +171,14 @@
         "column": {
             "word": "coluna",
             "definition": "$~Um campo com nome numa @Table."
+        },
+        "editor": {
+            "word": "$~editor",
+            "definition": "$~A caixa onde escreve @code. O que escrever ali é o que o @wordplay executa."
+        },
+        "stage": {
+            "word": "$~palco",
+            "definition": "$~O espaço onde @wordplay mostra o que o seu @code criou."
         }
     },
     "terms": {},
@@ -541,7 +549,8 @@
                 "codepoint": "$~o $concept",
                 "ui": "$~uma ligação para o elemento de interface $concept",
                 "how": "$~um link para o tutorial do $concept",
-                "character": "$~o $concept de personagem personalizado"
+                "character": "$~o $concept de personagem personalizado",
+                "tour": "$~uma ligação para uma visita guiada ao $concept"
             }
         },
         "Words": {
@@ -1949,7 +1958,7 @@
         "TableType": {
             "name": "$~table type",
             "emotion": "angry",
-            "doc": "Eu represento uma tabela.",
+            "doc": "$~Eu represento um @Table.",
             "conflict": {
                 "ExpectedColumnType": {
                     "name": "tipo de coluna em falta",
@@ -7759,7 +7768,7 @@
             "label": "conflitos e ajuda",
             "cursor": "$~Isto é um *$node*$type[ e é um $type|].",
             "cursorDoc": "$~Dizem: “$description”",
-            "cursorParent": "Estão dentro de um *$node*$type[ do tipo $type|].",
+            "cursorParent": "$~Estão dentro de um *$node*$type[, que resulta num $type|].",
             "learn": "/Saber mais/",
             "evaluating": "Que bom, vamos avaliar!",
             "space": "Isto é o espaço! Quem diria que o nada poderia dizer tanto?",
@@ -8242,7 +8251,7 @@
                 },
                 "field": {
                     "emailOrUsername": {
-                        "placeholder": "E-mail ou nome de utilizador",
+                        "placeholder": "$~email/nome de utilizador",
                         "description": "E-mail ou nome de utilizador da pessoa a quem pretende conceder acesso de edição."
                     },
                     "preview": {
@@ -8537,6 +8546,21 @@
                             "$~Não fazer nenhum som quando o resultado colide",
                             "$~Tocar um som curto quando o resultado colide, mais alto quanto mais forte for o impacto"
                         ]
+                    },
+                    "placement": {
+                        "label": "$~colocação do palco",
+                        "labels": [
+                            "$~canto superior esquerdo",
+                            "$~canto superior direito",
+                            "$~canto inferior esquerdo",
+                            "$~canto inferior direito"
+                        ],
+                        "tips": [
+                            "$~colocar o palco no canto superior esquerdo, e os outros mosaicos em lugares correspondentes à sua volta",
+                            "$~colocar o palco no canto superior direito, e os outros mosaicos em lugares correspondentes à sua volta",
+                            "$~colocar o palco no canto inferior esquerdo, e os outros mosaicos em lugares correspondentes à sua volta",
+                            "$~colocar o palco no canto inferior direito, e os outros mosaicos em lugares correspondentes à sua volta"
+                        ]
                     }
                 },
                 "options": {
@@ -8722,10 +8746,10 @@
             "label": "colaborar",
             "role": {
                 "owner": "proprietário",
-                "collaborators": "colaboradores (editar e conversar)",
-                "curators": "curadores",
-                "commenters": "comentadores (apenas chat)",
-                "viewers": "espectadores"
+                "collaborate": "$~colaborar",
+                "comment": "$~comentar",
+                "view": "$~ver",
+                "curate": "$~conservar"
             },
             "field": {
                 "message": {
@@ -8738,15 +8762,12 @@
                     "label": "enviar",
                     "tip": "Envie uma mensagem aos seus colaboradores e"
                 },
-                "start": {
-                    "label": "iniciar um chat",
-                    "tip": "Inicie uma conversa consigo próprio ou com outras pessoas."
-                },
                 "delete": "apagar esta mensagem",
                 "confirmDelete": "Confirmar eliminação?",
                 "transfer": {
                     "description": "$~tornar esta pessoa proprietária do projeto",
-                    "prompt": "$~Tornar esta pessoa proprietária? Continuará a ser colaborador(a) e poderá continuar a editar, mas deixará de poder eliminar este projeto."
+                    "prompt": "$~Tornar esta pessoa proprietária?",
+                    "consequence": "$~Vai continuar a ser colaborador(a) e pode continuar a editar, mas deixa de poder eliminar este projeto."
                 }
             },
             "moderation": {
@@ -8771,15 +8792,7 @@
                 "deleted": "Esta mensagem foi apagada.",
                 "transferGallery": "$~Este projeto está numa galeria. Dá-lo a outra pessoa não a adiciona a essa galeria, por isso ela pode não conseguir vê-lo lá."
             },
-            "prompt": {
-                "solo": "Converse consigo mesmo ou adicione...",
-                "owner": "Os colaboradores podem editar este projeto e conversar sobre ele. Os comentadores podem conversar, mas não podem editar este projeto. Os visualizadores podem visualizar este projeto, mas não podem conversar.",
-                "collaborator": "Você é um colaborador. Pode editar este projeto e conversar sobre ele.",
-                "curator": "É curador(a) da galeria deste projeto. Pode editar este projeto e conversar sobre ele. Apenas o(a) proprietário(a) do projeto, colaboradores e comentadores podem ver o chat.",
-                "commenter": "Você é um comentador. Pode conversar sobre este projeto, mas não pode editá-lo."
-            },
             "restrictGalleryCreatorAccess": {
-                "explanation": "O seu projeto está numa galeria. Por defeito, qualquer pessoa que possa ver esta galeria também poderá ver este projeto. Pode restringir o acesso ao seu projeto apenas a si e aos curadores da galeria.",
                 "mode": {
                     "label": "restringir o acesso ao projeto",
                     "labels": ["não restrinja", "restrito"],
@@ -8791,14 +8804,20 @@
             },
             "tour": {
                 "launch": "Faça um tour de colaboração",
-                "collaborate": "Os projetos podem ser partilhados com outras pessoas, e pode falar com todos com quem o projeto foi partilhado diretamente aqui.",
-                "collaborators": "/Os colaboradores/ podem *editar* o projeto e *conversar* sobre ele consigo.",
-                "commenters": "Os comentadores podem *discutir* o projeto consigo, mas não podem *editá-lo*.",
-                "viewers": "Os /Visualizadores/ podem *visualizar* o projeto e o seu *código*, mas não podem *discuti-lo* ou *editá-lo*.",
-                "restrict": "Quando um projeto está numa *galeria*, por defeito, *todos* os que conseguem ver a galeria podem também ver o seu projeto. A opção /restrict/ *oculta* o projeto de todos, exceto de si e dos curadores da galeria."
+                "collaborate": "$~Todas as pessoas que podem aceder a este projeto estão listadas aqui, e pode *conversar* com as que têm permissão para isso. Só o(a) /proprietário(a)/, os /colaboradores/ e os /comentadores/ podem ver a conversa.",
+                "collaborators": "$~Cada pessoa tem um /privilégio/. *Colaborar* significa que pode editar o projeto e conversar sobre ele. *Comentar* significa que pode conversar mas não editar. *Ver* significa que pode olhar mas não conversar. *Proprietário(a)* entrega-lhe o projeto. Os /curadores/ de uma galeria podem sempre aceder a ele, por isso não pode alterar o privilégio deles.",
+                "restrict": "Quando um projeto está numa *galeria*, por defeito, *todos* os que conseguem ver a galeria podem também ver o seu projeto. A opção /restrict/ *oculta* o projeto de todos, exceto de si e dos curadores da galeria.",
+                "add": "$~Prima o *+* no final da lista para adicionar alguém. Digite o *email* ou o *nome de utilizador*, escolha o que essa pessoa pode fazer, e ela junta-se à lista."
             },
             "announce": {
-                "transferred": "$~$name é agora o(a) proprietário(a) de $project"
+                "transferred": "$~$name é agora o(a) proprietário(a) de $project",
+                "privilege": "$~$name já pode $privilege",
+                "removed": "$~$name já não consegue aceder a este projeto",
+                "thread": "$~$#count[Conversa sobre a mensagem de $name, $count resposta|Conversa sobre a mensagem de $name, $count respostas|Conversa sobre a mensagem de $name, $count respostas]",
+                "reacted": "$~$#count[$emoji nesta mensagem, $count pessoa|$emoji nesta mensagem, $count pessoas|$emoji nesta mensagem, $count pessoas]",
+                "unreacted": "$~$#count[Retirou $emoji, $count pessoa saiu|Retirou $emoji, $count pessoas saíram|Retirou $emoji, $count pessoas saíram]",
+                "attached": "$~A falar sobre $location.",
+                "found": "$~$name disse $opening"
             },
             "translate": {
                 "label": "$~Traduzir mensagens para",
@@ -8807,16 +8826,53 @@
                 "messageError": "$~Não conseguimos traduzir esta mensagem.",
                 "messageErrors": "$~$#count[Não foi possível traduzir $#count mensagem.|Não foi possível traduzir $count milhões de mensagens.|Não foi possível traduzir $count mensagens.]",
                 "direction": "$~$from → $to",
-                "moreLanguages": "$~encontrar outro idioma",
-                "fewerLanguages": "$~ocultar a pesquisa de idiomas",
                 "translating": "$~A traduzir mensagens…",
                 "translated": "$~$#count[Traduzida $count mensagem para $language.|Traduzidas $count milhões de mensagens para $language.|Traduzidas $count mensagens para $language.]",
                 "writingIn": "$~Estou a escrever em",
                 "downloading": "$~A obter um tradutor de $language para o seu navegador…",
                 "onDevice": "$~O seu navegador traduziu estas mensagens no seu dispositivo, por isso nenhuma mensagem nos foi enviada.",
                 "none": "$~Não traduzir",
-                "dismiss": "$~fechar",
-                "nothing": "$~Não há nada aqui para traduzir para $to. Nunca traduzimos as suas próprias mensagens."
+                "dismiss": "$~fechar"
+            },
+            "table": {
+                "label": "$~quem pode aceder a este projeto",
+                "choose": "$~o que $name pode fazer",
+                "adding": "$~o que essa pessoa pode fazer",
+                "audience": "$~quem pode ver esta conversa",
+                "add": "$~adicionar alguém",
+                "cancel": "$~desistir de adicionar alguém"
+            },
+            "prompt": "$~adicionar colaboradores, comentadores e visualizadores",
+            "thread": {
+                "reply": "$~responder",
+                "replies": "$~$#count[$#count resposta|$count respostas|$count respostas]",
+                "unseen": "$~$#count[$#count resposta nova|$count respostas novas|$count respostas novas]",
+                "header": "$~Conversa",
+                "back": "$~voltar à conversa",
+                "empty": "$~Ainda sem respostas. Diga alguma coisa!",
+                "placeholder": "$~Responder…"
+            },
+            "reaction": {
+                "add": "$~reagir",
+                "more": "$~mais…",
+                "label": "$~Escolha uma reação",
+                "full": "$~Esta mensagem já tem todas as reações que pode ter.",
+                "close": "$~fechar as reações",
+                "pick": "$~reagir com $emoji",
+                "give": "$~$#count[adicione o seu $emoji — $count pessoa já reagiu|adicione o seu $emoji — $count pessoas já reagiram|adicione o seu $emoji — $count pessoas já reagiram]",
+                "take": "$~$#count[retire o seu $emoji — $count pessoa tem-no|retire o seu $emoji — $count pessoas têm-no|retire o seu $emoji — $count pessoas têm-no]"
+            },
+            "reference": {
+                "mode": {
+                    "on": "$~parar de falar sobre este código",
+                    "off": "$~falar sobre o código onde está o meu cursor"
+                },
+                "prompt": "$~A sua mensagem é sobre $location.",
+                "line": "$~linha $line",
+                "lines": "$~linhas $first–$last",
+                "label": "$~sobre $location: $code",
+                "invalid": "$~este código desapareceu",
+                "marker": "$~$#count[ler a mensagem sobre este código|ler as $#count mensagens sobre este código|ler as $count mensagens sobre este código]"
             }
         },
         "palette": {
@@ -9176,7 +9232,7 @@
                         ]
                     },
                     "example": {
-                        "phrase": "$~\\¶As Frases aparecem no palco, com a cor, o brilho e o movimento que quiser.¶\nFrase(\n\t'olá!'\n\t6m\n\tcor: Cor(60% 90 200°)\n\taura: Aura(Cor(80% 80 200°) 0.3m)\n\tdescansar: Sequência.balançar(8°)\n)\\",
+                        "phrase": "$~\\¶@Phrase aparece no palco, em qualquer cor, brilho e movimento que goste.¶\nFrase(\n\t'olá!'\n\t6m\n\tcor: Cor(60% 90 200°)\n\taura: Aura(Cor(80% 80 200°) 0.3m)\n\tdescansar: Sequência.balançar(8°)\n)\\",
                         "music": "$~\\¶A música são notas tocadas em instrumentos reais, com um andamento, numa tonalidade. O palco desenha o que ouve.¶\nMúsica(\n\tFaixa([1 3 5 8 5 3] instrumento: Instrumento.piano)\n\tandamento: 120beats/min\n)\\",
                         "hello": "$~\\¶O código pode reagir a entradas como @Time, e o texto pode ser multilingue e falado.¶\nolás: ['olá'/pt 'hola'/es 'こんにちは'/ja 'habari'/sw 'नमस्ते'/hi]\nolá: olás.aleatório() … ∆ Tempo(1000ms) … olás.aleatório()\nFrase(olá 4m)\nDizer(olá)\\",
                         "keys": "$~\\¶O código pode reagir a ponteiros, teclas, cliques e toques.¶\nchave2: Chave()\nclique: Botão()\nrostos: ['🙂' '😮' '😎' '🤩']\nqual: 1 … ∆ chave2 | ∆ clique … (qual % 4) + 1\nFase(\n\t[Frase(rostos[qual] 5m local: Ponteiro() balão: 'olá')]\n\tlocal: Local(0m 0m -12m)\n)\\",
@@ -9315,7 +9371,11 @@
                 },
                 "contrast": "$~comparar com",
                 "dialogue": "$~diálogo da lição",
-                "says": "$~$character diz"
+                "says": "$~$character diz",
+                "tour": {
+                    "skip": "$~saltar a visita guiada e continuar",
+                    "wait": "$~Faça primeiro a visita guiada, ou salte-a, e depois continuamos."
+                }
             },
             "teach": {
                 "header": "Ensinar",

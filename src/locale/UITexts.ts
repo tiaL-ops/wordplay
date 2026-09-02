@@ -1193,10 +1193,6 @@ type UITexts = {
             off: string;
             /** [plain] Button that dismisses a translation failure */
             dismiss: string;
-            /** [plain] Tip on the button that reveals a search field for languages beyond the ones already in this conversation */
-            moreLanguages: string;
-            /** [plain] Tip on the button that hides the language search field */
-            fewerLanguages: string;
             /** [plain] Label on the picker that says what language the message being written is in */
             writingIn: string;
             /** [plain] Label on the spinner shown while messages are being translated */
@@ -1209,8 +1205,6 @@ type UITexts = {
             direction: Template<['from', 'to']>;
             /** [plain] Shown when the browser translated on this device, so no messages were sent to Wordplay */
             onDevice: string;
-            /** [formatted] Shown when a language is chosen but there is nothing here to translate into it. $to is that language. */
-            nothing: Template<['to']>;
             /** [formatted] Shown when the conversation couldn't be translated. $to is the language it was being translated into. */
             error: Template<['to']>;
             /** [plain] Shown in place of one message that couldn't be translated */
@@ -1223,30 +1217,109 @@ type UITexts = {
             /** The chat message input field */
             message: FieldText;
         };
+        /** Replying to one message, instead of to the room */
+        thread: {
+            /** [plain] Button that starts a thread on a message that has none */
+            reply: string;
+            /** [plain] Button that opens a message's thread. $#count is how many replies it has. */
+            replies: Template<['#count']>;
+            /** [plain] Tip on a thread that has replies this reader hasn't seen. $#count is how many are new. */
+            unseen: Template<['#count']>;
+            /** [plain] Header above an open thread */
+            header: string;
+            /** [plain] Button that leaves a thread and returns to the conversation */
+            back: string;
+            /** [plain] Shown in an open thread that has no replies yet */
+            empty: string;
+            /** [plain] The message field's placeholder while writing in a thread */
+            placeholder: string;
+        };
+        /** Reacting to a message with an emoji */
+        reaction: {
+            /** [plain] Button that opens the reaction chooser */
+            add: string;
+            /** [plain] The same button once the chooser is open, when pressing it closes it again */
+            close: string;
+            /** [plain] Button that opens the whole emoji chooser, for a reaction not offered */
+            more: string;
+            /** [plain] The accessible name of the reaction chooser */
+            label: string;
+            /** [plain] One of the reactions offered without a search. $emoji names it. */
+            pick: Template<['emoji']>;
+            /** [plain] A reaction you have not chosen, so pressing adds yours. $emoji names the emoji, $#count is how many people have chosen it. */
+            give: Template<['emoji', '#count']>;
+            /** [plain] A reaction you have chosen, so pressing takes yours back. $emoji names the emoji, $#count is how many people have chosen it. */
+            take: Template<['emoji', '#count']>;
+            /** [plain] Shown when a message has collected as many different reactions as it can hold */
+            full: string;
+        };
+        /** Saying which code a message is about */
+        reference: {
+            /** The control on the message being written that says it is about
+             *  wherever the caret is in the code. Pressing it again takes the
+             *  link back; there is nothing else to press. */
+            mode: ToggleText;
+            /** [formatted] Shown in the editor holding the code the message being written is about. $location is the line or lines. */
+            prompt: Template<['location']>;
+            /** [plain] Names one line of code. $line is its number. */
+            line: Template<['line']>;
+            /** [plain] Names a run of lines. $first and $last are their numbers. */
+            lines: Template<['first', 'last']>;
+            /** [plain] The accessible name of a reference in a message. $location is the line or lines it names, $code the code that is there now. */
+            label: Template<['location', 'code']>;
+            /** [plain] Shown in place of a reference whose code is no longer there */
+            invalid: string;
+            /** [plain] The marker in the code's gutter that leads to what was said about it. $#count is how many messages are about this code. */
+            marker: Template<['#count']>;
+        };
+        /** [plain] Shown above the add field while nobody has been added yet, saying what the tile is for */
+        prompt: string;
+        /** What each person in the project may do. These name a privilege, not a
+         *  kind of person, so they read both as a cell in the table of people
+         *  and as an option in the picker that changes one. */
         role: {
-            /** [plain] What to call the owner of a project */
+            /** [plain] The privilege of the person who owns the project */
             owner: string;
-            /** [plain] What to call collaborators */
-            collaborators: string;
-            /** [plain] What to call curators */
-            curators: string;
-            /** [plain] What to call commenters */
-            commenters: string;
-            /** [plain] What to call viewers */
-            viewers: string;
+            /** [plain] The privilege of someone who may edit the project and chat about it */
+            collaborate: string;
+            /** [plain] The privilege of someone who may chat about the project but not edit it */
+            comment: string;
+            /** [plain] The privilege of someone who may look at the project but not chat or edit */
+            view: string;
+            /** [plain] The privilege of a curator of the gallery the project is in, which the project's owner cannot change */
+            curate: string;
+        };
+        /** The table of everyone who can reach the project */
+        table: {
+            /** [plain] The accessible name of the table listing everyone who can reach the project */
+            label: string;
+            /** [plain] The accessible name of the picker that changes one person's privilege. $name is that person. */
+            choose: Template<['name']>;
+            /** [plain] The accessible name of the picker that chooses what a person being added may do */
+            adding: string;
+            /** [plain] The button at the end of the table that shows the field for adding someone */
+            add: string;
+            /** [plain] The same button once the field is showing, when pressing it puts the field away */
+            cancel: string;
+            /** [plain] The accessible name of the row of people, shown in place of the table while a message is being written, who can see the chat */
+            audience: string;
         };
         /** Buttons in the chat tile */
         button: {
             /** The chat send button */
             submit: ButtonText;
-            /** The start a chat button */
-            start: ButtonText;
             /** [plain] The message delete button */
             delete: string;
             /** [plain] Confirm deleting the message */
             confirmDelete: string;
-            /** The button that hands ownership of the project to a collaborator */
-            transfer: ConfirmText;
+            /** The button that hands ownership of the project to a collaborator.
+             *  Its `prompt` is the button's own label, so it stays short enough
+             *  not to stretch the row it sits in; what it costs you is said
+             *  beside it. */
+            transfer: ConfirmText & {
+                /** [plain] What the owner gives up by handing the project over */
+                consequence: string;
+            };
         };
         /** Dialog for chat moderation */
         moderation: HeaderAndExplanationText & {
@@ -1275,28 +1348,29 @@ type UITexts = {
             /** [formatted] Shown next to the ownership transfer control when the project is in a gallery, since gallery membership doesn't follow the project to its new owner */
             transferGallery: FormattedText;
         };
-        /** Announcements made as collaboration changes */
+        /** Announcements made as collaboration changes. Each names the person,
+         *  since an announcement that reads the same twice running is heard
+         *  once and then sounds broken. */
         announce: {
             /** [plain] Said when the project is handed to a new owner */
             transferred: Template<['name', 'project']>;
-        };
-        /** Messages to explain the purpose of the chat to each kind of participant */
-        prompt: {
-            /** [plain] Shown when the user is the only participant; invites them to add collaborators */
-            solo: string;
-            /** [plain] Shown to the project owner; describes what collaborators and commenters can do */
-            owner: string;
-            /** [plain] Shown to collaborators; describes their editing and chat permissions */
-            collaborator: string;
-            /** [plain] Shown to gallery curators; describes their editing and chat permissions */
-            curator: string;
-            /** [plain] Shown to commenters; describes their chat-only permissions */
-            commenter: string;
+            /** [plain] Said when someone's privilege changes. $name is that person, $privilege what they may now do. */
+            privilege: Template<['name', 'privilege']>;
+            /** [plain] Said when someone is taken off the project. $name is that person. */
+            removed: Template<['name']>;
+            /** [plain] Said when a thread is opened. $name is who wrote the message it is about, $#count how many replies it has. */
+            thread: Template<['name', '#count']>;
+            /** [plain] Said when a reaction is added. $emoji is the emoji, $#count how many people have now chosen it. */
+            reacted: Template<['emoji', '#count']>;
+            /** [plain] Said when a reaction is taken back. $emoji is the emoji, $#count how many people are left. */
+            unreacted: Template<['emoji', '#count']>;
+            /** [plain] Said when code is attached to the message being written. $location is the line or lines. */
+            attached: Template<['location']>;
+            /** [plain] Said when a marker in the code takes the reader to what was said about it. $name is who said it, $opening how it starts. */
+            found: Template<['name', 'opening']>;
         };
         /** Controls for restricting project visibility when it is in a gallery */
         restrictGalleryCreatorAccess: {
-            /** [formatted] Explains that the project is in a gallery and describes the visibility restriction option */
-            explanation: FormattedText;
             /** The toggle mode for restricting project visibility to owner and curators only */
             mode: ModeText<[string, string]>;
         };
@@ -1306,12 +1380,10 @@ type UITexts = {
             launch: string;
             /** [formatted] Markup describing the collaborate panel */
             collaborate: FormattedText;
-            /** [formatted] Markup describing the collaborators field */
+            /** [formatted] Markup describing the table of people and what each privilege means */
             collaborators: FormattedText;
-            /** [formatted] Markup describing the commenters field */
-            commenters: FormattedText;
-            /** [formatted] Markup describing the viewers field */
-            viewers: FormattedText;
+            /** [formatted] Markup describing the field that adds someone to the project */
+            add: FormattedText;
             /** [formatted] Markup describing the restrict-gallery toggle */
             restrict: FormattedText;
         };
@@ -1767,6 +1839,9 @@ type UITexts = {
                 layout: ModeText<
                     [string, string, string, string, string, string]
                 >;
+                /** Where the stage sits in the layouts that lay tiles out on
+                 *  axes, which mirrors the other tiles around it */
+                placement: ModeText<[string, string, string, string]>;
                 /** The animation off/slowdown/auto mode (last entry is
                  * "auto", which follows the device prefers-reduced-motion
                  * setting). */

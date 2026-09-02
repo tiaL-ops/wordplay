@@ -61,6 +61,11 @@ const Lanes = {
     // interrupt — a failure the creator must hear at once
     ignored: { lane: 'interrupt', immediate: true },
     banner: { lane: 'interrupt', immediate: true },
+    // The tutorial refusing to advance until a tour is taken. Interrupt rather
+    // than queued because it answers a keystroke that did nothing, and because
+    // this lane re-presents identical text: the refusal is the same event every
+    // time, so the usual "vary the words or it's heard once" fix doesn't apply.
+    'tutorial-tour': { lane: 'interrupt', immediate: true },
     // queued
     fold: 'queued',
     selection: 'queued',
@@ -83,6 +88,18 @@ const Lanes = {
     // example is what keeps consecutive choices from deduping into silence.
     tour: 'queued',
     collaborator: 'queued',
+    /** Opening or leaving a chat thread, and the result of pressing the reply
+     *  control. Discrete answers to a press, so queued rather than coalesced;
+     *  each names the thread's author and reply count, since the queued lane
+     *  drops a repeat of identical text. */
+    'chat-thread': 'queued',
+    /** Adding or taking back a reaction, and a refusal when a message has
+     *  collected all the emoji it may. Names the emoji and the new count for
+     *  the same reason. */
+    'chat-reaction': 'queued',
+    /** Entering and leaving code-reference mode, attaching a reference to a
+     *  message, and resolving one. Names the lines involved. */
+    'chat-reference': 'queued',
     /** A committed change to how projects are organized: one moved into or out
      *  of a folder, or a folder created, expanded, collapsed, selected, or
      *  deleted. Each is a discrete result, so none may be dropped. */

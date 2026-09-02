@@ -171,6 +171,14 @@
         "column": {
             "word": "$~kolom",
             "definition": "$~Sebuah kolom bernama di dalam @Table."
+        },
+        "editor": {
+            "word": "$~editor",
+            "definition": "$~Kotak tempat kamu menulis @code. Apa yang kamu ketik di sana akan dijalankan oleh @wordplay."
+        },
+        "stage": {
+            "word": "$~panggung",
+            "definition": "$~Ruang tempat @wordplay menampilkan hasil buatan @code kamu."
         }
     },
     "terms": {},
@@ -541,7 +549,8 @@
                 "codepoint": "$~$concept karakter Unicode",
                 "ui": "$~tautan ke elemen antarmuka $concept",
                 "how": "$~tautan ke panduan $concept",
-                "character": "$~karakter kustom $concept"
+                "character": "$~karakter kustom $concept",
+                "tour": "$~tautan ke tur $concept"
             }
         },
         "Words": {
@@ -1950,7 +1959,7 @@
             "name": "$~jenis tabel",
             "description": "$~tabel",
             "emotion": "angry",
-            "doc": "$~Saya mewakili sebuah Tabel.",
+            "doc": "$~Saya mewakili sebuah @Table.",
             "conflict": {
                 "ExpectedColumnType": {
                     "name": "$~jenis kolom hilang",
@@ -7767,7 +7776,7 @@
             "label": "$~konflik dan bantuan",
             "cursor": "$~Ini adalah *$node*$type[ dan itu adalah sebuah $type|].",
             "cursorDoc": "$~Mereka berkata: “$description”",
-            "cursorParent": "$~Mereka berada di dalam * $node * $type[ bertipe $type |].",
+            "cursorParent": "$~Mereka ada di dalam *$node*$type[, yang menghasilkan sebuah $type|].",
             "learn": "$~Pelajari selengkapnya",
             "evaluating": "$~Wah, seru sekali, mari kita evaluasi!",
             "space": "$~Inilah ruang angkasa! Siapa sangka ketiadaan bisa mengungkapkan begitu banyak hal?",
@@ -8258,7 +8267,7 @@
                 },
                 "field": {
                     "emailOrUsername": {
-                        "placeholder": "$~email atau nama pengguna",
+                        "placeholder": "$~email/nama pengguna",
                         "description": "$~Alamat email atau nama pengguna orang yang ingin Anda beri akses edit."
                     },
                     "preview": {
@@ -8553,6 +8562,21 @@
                             "$~Jangan buat suara saat keluaran bertabrakan",
                             "$~Putar suara saat keluaran bertabrakan, makin keras benturannya makin keras suaranya"
                         ]
+                    },
+                    "placement": {
+                        "label": "$~penempatan panggung",
+                        "labels": [
+                            "$~kiri atas",
+                            "$~kanan atas",
+                            "$~kiri bawah",
+                            "$~kanan bawah"
+                        ],
+                        "tips": [
+                            "$~letakkan panggung di kiri atas, dan ubin lain di tempat yang sesuai di sekitarnya",
+                            "$~letakkan panggung di kanan atas, dan ubin lain di tempat yang sesuai di sekitarnya",
+                            "$~letakkan panggung di kiri bawah, dan ubin lain di tempat yang sesuai di sekitarnya",
+                            "$~letakkan panggung di kanan bawah, dan ubin lain di tempat yang sesuai di sekitarnya"
+                        ]
                     }
                 },
                 "options": {
@@ -8738,10 +8762,10 @@
             "label": "$~berkolaborasi",
             "role": {
                 "owner": "$~pemilik",
-                "collaborators": "$~kolaborator (mengedit dan mengobrol)",
-                "curators": "$~kurator",
-                "commenters": "$~komentator (hanya obrolan)",
-                "viewers": "$~pemirsa"
+                "collaborate": "$~berkolaborasi",
+                "comment": "$~berkomentar",
+                "view": "$~melihat",
+                "curate": "$~mengelola"
             },
             "field": {
                 "message": {
@@ -8754,15 +8778,12 @@
                     "label": "$~mengirim",
                     "tip": "$~kirim pesan ke kolaborator Anda dan"
                 },
-                "start": {
-                    "label": "$~Mulai obrolan",
-                    "tip": "$~Mulailah diskusi dengan diri sendiri atau orang lain."
-                },
                 "delete": "$~hapus pesan ini",
                 "confirmDelete": "$~Konfirmasi penghapusan?",
                 "transfer": {
                     "description": "$~jadikan orang ini sebagai pemilik proyek",
-                    "prompt": "$~Jadikan mereka pemilik? Kamu akan tetap menjadi kolaborator dan bisa terus mengedit, tetapi kamu tidak akan bisa lagi menghapus proyek ini."
+                    "prompt": "$~Jadikan mereka pemilik?",
+                    "consequence": "$~Kamu akan tetap menjadi kolaborator dan bisa terus menyunting, tapi kamu tidak akan bisa lagi menghapus proyek ini."
                 }
             },
             "moderation": {
@@ -8787,15 +8808,7 @@
                 "deleted": "$~Pesan ini telah dihapus.",
                 "transferGallery": "$~Proyek ini ada di dalam galeri. Memberikannya kepada orang lain tidak menambahkan mereka ke galeri itu, jadi mereka mungkin tidak bisa melihatnya di sana."
             },
-            "prompt": {
-                "solo": "$~Berbincanglah dengan diri sendiri atau tambahkan...",
-                "owner": "$~Kolaborator dapat mengedit proyek ini dan berdiskusi di dalamnya. Pemberi komentar dapat berdiskusi tetapi tidak dapat mengedit proyek ini. Pemirsa dapat melihat proyek ini tetapi tidak dapat berdiskusi.",
-                "collaborator": "$~Anda adalah seorang kolaborator. Anda dapat mengedit proyek ini dan berdiskusi tentangnya.",
-                "curator": "$~Anda adalah kurator galeri proyek ini. Anda dapat mengedit proyek ini dan berdiskusi di dalamnya. Hanya pemilik proyek, kolaborator, dan pemberi komentar yang dapat melihat obrolan tersebut.",
-                "commenter": "$~Anda adalah seorang pemberi komentar. Anda dapat mengobrol tentang proyek ini tetapi tidak dapat mengeditnya."
-            },
             "restrictGalleryCreatorAccess": {
-                "explanation": "$~Proyek Anda berada di dalam galeri. Secara default, siapa pun yang dapat melihat galeri ini dapat melihat proyek ini. Anda dapat membatasi siapa yang dapat melihat proyek Anda hanya kepada Anda dan kurator galeri.",
                 "mode": {
                     "label": "$~batasi akses proyek",
                     "labels": ["$~jangan membatasi", "$~membatasi"],
@@ -8807,14 +8820,20 @@
             },
             "tour": {
                 "launch": "$~ikuti tur kolaborasi",
-                "collaborate": "$~Proyek dapat dibagikan dengan orang lain, dan Anda dapat mengobrol dengan semua orang yang menerima pembagian proyek tersebut di sini.",
-                "collaborators": "$~Para kolaborator dapat *mengedit* proyek dan *berdiskusi* tentangnya dengan Anda.",
-                "commenters": "$~Para pemberi komentar dapat *mendiskusikan* proyek tersebut dengan Anda, tetapi mereka tidak dapat *mengedit*nya.",
-                "viewers": "$~Para penonton dapat *melihat* proyek dan *kode*-nya, tetapi mereka tidak dapat *mendiskusikan* atau *mengedit*nya.",
-                "restrict": "$~Saat sebuah proyek berada di *galeri*, secara default *semua orang* yang dapat melihat galeri dapat melihat proyek Anda. Tombol /restrict/ *menyembunyikannya* dari semua orang kecuali Anda dan kurator galeri."
+                "collaborate": "$~Semua orang yang bisa membuka proyek ini ada dalam daftar ini, dan kamu bisa *mengobrol* dengan orang-orang yang diizinkan. Hanya /pemilik/, /kolaborator/, dan /pengomentar/ yang bisa melihat obrolan.",
+                "collaborators": "$~Setiap orang punya satu /hak akses/. *Berkolaborasi* berarti mereka bisa menyunting proyek dan mengobrol tentangnya. *Berkomentar* berarti mereka bisa mengobrol tapi tidak bisa menyunting. *Melihat* berarti mereka hanya bisa melihat, bukan mengobrol. *Pemilik* menyerahkan proyek ini pada mereka. /Pengelola/ galeri selalu bisa membukanya, jadi kamu tidak bisa mengubah hak akses mereka.",
+                "restrict": "$~Saat sebuah proyek berada di *galeri*, secara default *semua orang* yang dapat melihat galeri dapat melihat proyek Anda. Tombol /restrict/ *menyembunyikannya* dari semua orang kecuali Anda dan kurator galeri.",
+                "add": "$~Tekan tanda *+* di akhir daftar untuk menambahkan seseorang. Ketik *email* atau *nama pengguna* mereka, pilih apa yang boleh mereka lakukan, dan mereka akan bergabung ke daftar."
             },
             "announce": {
-                "transferred": "$~$name sekarang menjadi pemilik $project"
+                "transferred": "$~$name sekarang menjadi pemilik $project",
+                "privilege": "$~$name sekarang bisa $privilege",
+                "removed": "$~$name tidak bisa lagi membuka proyek ini",
+                "thread": "$~$#count[Utas pada pesan $name, $count balasan]",
+                "reacted": "$~$#count[$emoji pada pesan ini, $count orang]",
+                "unreacted": "$~$#count[Membatalkan $emoji, $count orang berhenti]",
+                "attached": "$~Sedang membahas $location.",
+                "found": "$~$name berkata $opening"
             },
             "translate": {
                 "label": "$~Terjemahkan pesan ke",
@@ -8823,16 +8842,53 @@
                 "messageError": "$~Kami tidak bisa menerjemahkan pesan ini.",
                 "messageErrors": "$~$#count[Kami tidak bisa menerjemahkan $count pesan.]",
                 "direction": "$~$from → $to",
-                "moreLanguages": "$~Cari bahasa lain",
-                "fewerLanguages": "$~Sembunyikan pencarian bahasa",
                 "translating": "$~Menerjemahkan pesan…",
                 "translated": "$~$#count[Menerjemahkan $count pesan ke $language.]",
                 "writingIn": "$~Saya menulis dalam",
                 "downloading": "$~Mengambil penerjemah $language untuk peramban Anda…",
                 "onDevice": "$~Peramban Anda menerjemahkan ini di perangkat Anda, jadi tidak ada pesan yang dikirim ke kami.",
                 "none": "$~Jangan diterjemahkan",
-                "dismiss": "$~tutup",
-                "nothing": "$~Tidak ada apa pun di sini untuk diterjemahkan ke $to. Kami tidak pernah menerjemahkan pesanmu sendiri."
+                "dismiss": "$~tutup"
+            },
+            "table": {
+                "label": "$~siapa saja yang bisa membuka proyek ini",
+                "choose": "$~apa yang bisa dilakukan $name",
+                "adding": "$~apa yang bisa mereka lakukan",
+                "audience": "$~siapa saja yang bisa melihat obrolan ini",
+                "add": "$~tambahkan seseorang",
+                "cancel": "$~batalkan penambahan seseorang"
+            },
+            "prompt": "$~Tambahkan kolaborator, pengomentar, dan penonton",
+            "thread": {
+                "reply": "$~balas",
+                "replies": "$~$#count[$count balasan]",
+                "unseen": "$~$#count[$count balasan baru]",
+                "header": "$~Utas",
+                "back": "$~kembali ke percakapan",
+                "empty": "$~Belum ada balasan. Katakan sesuatu!",
+                "placeholder": "$~Balas…"
+            },
+            "reaction": {
+                "add": "$~beri reaksi",
+                "more": "$~lainnya…",
+                "label": "$~Pilih sebuah reaksi",
+                "full": "$~Pesan ini sudah memiliki semua reaksi yang bisa ditampung.",
+                "close": "$~tutup daftar reaksi",
+                "pick": "$~beri reaksi dengan $emoji",
+                "give": "$~$#count[tambahkan $emoji milikmu — $count orang sudah melakukannya]",
+                "take": "$~$#count[batalkan $emoji milikmu — $count orang memilikinya]"
+            },
+            "reference": {
+                "mode": {
+                    "on": "$~berhenti membahas kode ini",
+                    "off": "$~bahas kode di tempat kursor saya berada"
+                },
+                "prompt": "$~Pesanmu tentang $location.",
+                "line": "$~baris $line",
+                "lines": "$~baris $first–$last",
+                "label": "$~tentang $location: $code",
+                "invalid": "$~kode ini sudah hilang",
+                "marker": "$~$#count[baca $count pesan tentang kode ini]"
             }
         },
         "palette": {
@@ -9192,7 +9248,7 @@
                         ]
                     },
                     "example": {
-                        "phrase": "$~\\¶Phrase muncul di panggung, dengan warna, cahaya, dan gerakan apa pun yang kamu suka.¶\nFrasa(\n\t'halo!'\n\t6m\n\twarna: Warna(60% 90 200°)\n\taura: Aura(Warna(80% 80 200°) 0.3m)\n\tberistirahat: Urutan.bergoyang(8°)\n)\\",
+                        "phrase": "$~\\¶@Phrase muncul di atas panggung, dengan warna, cahaya, dan gerakan apa pun yang kamu suka.¶\nFrasa(\n\t'halo!'\n\t6m\n\twarna: Warna(60% 90 200°)\n\taura: Aura(Warna(80% 80 200°) 0.3m)\n\tberistirahat: Urutan.bergoyang(8°)\n)\\",
                         "music": "$~\\¶Musik adalah nada pada alat musik sungguhan, dengan tempo, dalam sebuah kunci nada. Panggung menggambar apa yang didengarnya.¶\nMusik(\n\tTrek([1 3 5 8 5 3] alatMusik: AlatMusik.piano)\n\ttempo: 120beats/min\n)\\",
                         "hello": "$~\\¶Kode bisa bereaksi terhadap masukan seperti @Time, dan teks bisa berbahasa banyak dan diucapkan.¶\nhellos: ['halo'/id 'hola'/es 'こんにちは'/ja 'habari'/sw 'नमस्ते'/hi]\nhalo: hellos.acak() … ∆ Waktu(1000ms) … hellos.acak()\nFrasa(halo 4m)\nMengatakan(halo)\\",
                         "keys": "$~\\¶Kode bisa bereaksi terhadap penunjuk, tombol, klik, dan ketukan.¶\nkunci2: Kunci()\nklik: Tombol()\nwajah2: ['🙂' '😮' '😎' '🤩']\nyangMana: 1 … ∆ kunci2 | ∆ klik … (yangMana % 4) + 1\nPanggung(\n\t[Frasa(wajah2[yangMana] 5m tempat: Penunjuk() gelembung: 'hai')]\n\ttempat: Tempat(0m 0m -12m)\n)\\",
@@ -9331,7 +9387,11 @@
                 },
                 "contrast": "$~bandingkan dengan",
                 "dialogue": "$~dialog pelajaran",
-                "says": "$~$character berkata"
+                "says": "$~$character berkata",
+                "tour": {
+                    "skip": "$~lewati tur dan lanjutkan",
+                    "wait": "$~Ikuti tur ini dulu, atau lewati saja, lalu kita akan lanjutkan."
+                }
             },
             "localize": {
                 "header": "$~Melokalisir",
